@@ -1,0 +1,130 @@
+#include "server.h"
+#include "lib/xmlworld.h"
+
+const int Server::END = 0;
+const int Server::ERROR_PARAM = 1;
+const int Server::ERROR_THREAD = 2;
+const int Server::ERROR_XML = 3;
+const int Server::MAX_CLIENTS = 20;
+const int Server::MAX_PLAYERS = 8;
+const int Server::PROTOCOL_VERSION = 0;
+const int Server::WAITKBD = 200;
+const char Server::SALIDA = 'Q';
+const string Server::STR_SERVER_ABORT = "Server aborted: server is shuting down...";
+const string Server::STR_XML_ERROR = "Invalid World File! The world file is corrupt.";
+const string Server::STR_XML_WORLD_NO_LEVELS = "Invalid World File! World is empty.";
+const string Server::STR_CONFIG_ERROR = "Configuration was not loaded.";
+const string Server::STR_SERVER_ERROR = "Server must close due to an internal error...";
+const string Server::STR_CONNECT_ERROR = "Server could not establish a connection. Check server's address and TCP port.";
+const string Server::STR_SERVER_INIT = "Server is running... Press 'Q' to close.";
+
+//se fija si se presiono una tecla en STDIN
+bool Server::kbhit() 
+{
+    struct timeval tv;
+    fd_set read_fd;
+    tv.tv_sec=0;
+    tv.tv_usec=0;
+    FD_ZERO(&read_fd);
+    FD_SET(0,&read_fd);
+    if (select(1, &read_fd, 0, 0, &tv) == -1)
+        return false;
+    if (FD_ISSET(0,&read_fd))
+        return true;
+    return false;
+}
+
+void Server::loadConfig(const tConfig &config) 
+{
+    _gameConfig.min = config.min;
+    _gameConfig.max = config.max;
+    _gameConfig.ghostComm = config.ghostComm;
+    _gameConfig.lives = config.lives;
+    _gameConfig.logFile = config.logFile;
+    _gameConfig.waitingTime = 1000*config.waitingTime;
+    _gameConfig.protocolVersion = PROTOCOL_VERSION;
+}
+
+int Server::startService(const tConfig &config) 
+{
+    //carga configuracion de juego
+    loadConfig (config);
+    bool close = false;
+    std::cout << STR_SERVER_INIT << std::endl;
+    //ciclo para jugar muhos juegos
+    while (!close) {
+        //carga world de xml
+        World world;
+        try {
+            XmlWorld::Load(config.worldFile,world);
+        }
+        catch (string & e) {
+            std::cerr << STR_XML_ERROR <<endl;
+            return ERROR_XML;
+        }
+        if (world.getLevels()->size() == 0) {
+            std::cerr << STR_XML_WORLD_NO_LEVELS << endl;
+            return ERROR_XML;
+        }
+        ThreadGame thGame(world,_gameConfig,PROTOCOL_VERSION);
+        //thread para atencion a clientes
+        ThreadDispatcher thDispatcher(config.address, config.port, MAX_CLIENTS, thGame, PROTOCOL_VERSION);
+        //lanza threads
+        thGame.run();
+        thDispatcher.run();
+        if ((!thGame) || (!thDispatcher)) {
+            thGame.stop();
+            thDispatcher.stop();
+            thDispatcher.join();
+            thGame.join();
+            std::cerr << STR_CONNECT_ERROR << std::endl;
+            return ERROR_THREAD;
+        }
+        //espera hasta que se cierre el server con una Q
+        while (!close) {
+            if (!thGame) {
+                thGame.stop();
+                thDispatcher.stop();
+                thDispatcher.join();
+                thGame.join();
+                std::cerr << STR_SERVER_ERROR << std::endl;
+                return ERROR_THREAD;
+            }
+            if (thGame.getEnded())
+                break;
+            if (kbhit()) {
+                //hay una tecla para leer
+                char ch;
+                std::cin >> ch;
+                if (toupper(ch) == SALIDA) {
+                    //cierra server
+                    std::cout << STR_SERVER_ABORT << std::endl;
+                    close = true;
+                    thGame.shutDown();
+                    break;
+                }
+            }
+            usleep(WAITKBD*1000);
+        }
+        //detiene threads
+        thGame.stop();
+        thDispatcher.stop();
+        //espera hilos
+        thDispatcher.join();
+        thGame.join();
+    }
+    return END;
+}
+
+int Server::run() 
+{
+    //lanza pantalla de configuracion
+    ConfigScreen screen(_argc,_argv,MAX_PLAYERS);
+    if (!screen.configLoaded()) {
+        std::cerr << STR_CONFIG_ERROR << endl;
+        return ERROR_PARAM;
+    }
+    tConfig config = screen.getConfig();
+    //levanta server para realizar el juego
+    return startService(config);
+}

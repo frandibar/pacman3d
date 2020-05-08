@@ -1,0 +1,14 @@
+Import('env')
+
+newEnv = env.Clone()
+
+target = 'tinyxml'
+
+src_files = Split("""
+    tinystr.cpp
+    tinyxml.cpp
+    tinyxmlerror.cpp
+    tinyxmlparser.cpp
+""")
+
+newEnv.SharedLibrary(target, src_files)

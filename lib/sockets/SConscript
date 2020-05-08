@@ -1,0 +1,14 @@
+Import('env')
+
+newEnv = env.Clone()
+
+target = 'sockets'
+
+src_files = Split("""
+    ClientSocket.cpp
+    ServerSocket.cpp
+    Socket.cpp
+""")
+
+newEnv.SharedLibrary(target, src_files)
+

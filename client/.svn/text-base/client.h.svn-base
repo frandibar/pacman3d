@@ -1,0 +1,35 @@
+#ifndef __CLIENT_H__
+#define __CLIENT_H__
+#include "connectscreen.h"
+#include "graphicupdater.h"
+#include <string>
+using std::string;
+/** Clase que ejecuta la rutina de un cliente 
+*/
+class Client {
+  private:
+    static const int END;
+    static const int ERROR_PARAM;
+    static const int ERROR_THREAD;
+    static const int ERROR_SERVER;
+    static const string STR_CONFIG_ERROR;
+    static const string STR_ERROR_THREAD;
+    static const string STR_ERROR_SERVER;
+    static const int PROTOCOL_VERSION;
+
+    int _argc;
+    char **_argv;
+    tSoundType _sound;
+    tMovementKeys _movementKeys;
+    ShortcutMap _chatShortcuts;
+    SocketProtocol *_socket;
+    string _playerName;
+
+    bool showScreen();
+  public:
+    ///constructor 
+    Client(int argc, char **argv):_argc(argc),_argv(argv){};
+    ///lanza pantalla de configuracion e inicia juego
+    int run();
+};
+#endif

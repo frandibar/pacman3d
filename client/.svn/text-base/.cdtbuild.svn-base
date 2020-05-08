@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<?fileVersion 3.1.0?>
+<ManagedProjectBuildInfo>
+  <project id="client.cdt.managedbuild.target.gnu.exe.1041372276" name="Executable (Gnu)" projectType="cdt.managedbuild.target.gnu.exe">
+    <configuration id="cdt.managedbuild.config.gnu.exe.debug.1865291073" name="Debug" description="" parent="cdt.managedbuild.config.gnu.exe.debug" artifactName="client" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" cleanCommand="rm -rf">
+      <toolChain superClass="cdt.managedbuild.toolchain.gnu.exe.debug" id="cdt.managedbuild.toolchain.gnu.exe.debug.1553959982" name="GCC Tool Chain">
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1183687530" name="GCC C++ Compiler">
+          <option superClass="gnu.cpp.compiler.option.include.paths" id="gnu.cpp.compiler.option.include.paths.376617724" valueType="includePath">
+            <listOptionValue value="../../" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.compiler.option.other.other" id="gnu.cpp.compiler.option.other.other.530135538" value="`sdl-config --cflags` `pkg-config --cflags libglademm-2.4` `pkg-config --cflags gtkmm-2.4` -c -fmessage-length=0" valueType="string"/>
+          <option superClass="gnu.cpp.compiler.option.warnings.pedantic" id="gnu.cpp.compiler.option.warnings.pedantic.1457679549" value="true" valueType="boolean"/>
+        </tool>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug" id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.490553982" name="GCC C Compiler"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug" id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.194690009" name="GCC C Linker"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug" id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.2010883890" name="GCC C++ Linker">
+          <option superClass="gnu.cpp.link.option.libs" id="gnu.cpp.link.option.libs.1998725069" valueType="libs">
+            <listOptionValue value="SDL" builtIn="false"/>
+            <listOptionValue value="GL" builtIn="false"/>
+            <listOptionValue value="GLU" builtIn="false"/>
+            <listOptionValue value="SDL_mixer" builtIn="false"/>
+            <listOptionValue value="pthread" builtIn="false"/>
+            <listOptionValue value="common" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.link.option.paths" id="gnu.cpp.link.option.paths.1183834093" valueType="stringList">
+            <listOptionValue value="../../common/Debug" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.link.option.other" id="gnu.cpp.link.option.other.947457380" valueType="stringList">
+            <listOptionValue value="`pkg-config --libs libglademm-2.4`" builtIn="false"/>
+            <listOptionValue value="`pkg-config --libs gtkmm-2.4`" builtIn="false"/>
+            <listOptionValue value="`sdl-config --libs`" builtIn="false"/>
+          </option>
+        </tool>
+        <tool superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug" id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1824960733" name="GCC Assembler"/>
+        <macros/>
+      </toolChain>
+    </configuration>
+    <configuration id="cdt.managedbuild.config.gnu.exe.release.858615159" name="Release" description="" parent="cdt.managedbuild.config.gnu.exe.release" artifactName="client" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" cleanCommand="rm -rf">
+      <toolChain superClass="cdt.managedbuild.toolchain.gnu.exe.release" id="cdt.managedbuild.toolchain.gnu.exe.release.434226756" name="GCC Tool Chain">
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1194760503" name="GCC C++ Compiler">
+          <option superClass="gnu.cpp.compiler.option.warnings.pedantic" id="gnu.cpp.compiler.option.warnings.pedantic.1155131628" value="true" valueType="boolean"/>
+          <option superClass="gnu.cpp.compiler.option.other.other" id="gnu.cpp.compiler.option.other.other.129924314" value="`sdl-config --cflags` `pkg-config --cflags libglademm-2.4` `pkg-config --cflags gtkmm-2.4` -c -fmessage-length=0" valueType="string"/>
+          <option superClass="gnu.cpp.compiler.option.include.paths" id="gnu.cpp.compiler.option.include.paths.581273156" valueType="includePath">
+            <listOptionValue value="../../" builtIn="false"/>
+          </option>
+        </tool>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release" id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.1245767631" name="GCC C Compiler"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release" id="cdt.managedbuild.tool.gnu.c.linker.exe.release.1730842026" name="GCC C Linker"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release" id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.374667825" name="GCC C++ Linker">
+          <option superClass="gnu.cpp.link.option.other" id="gnu.cpp.link.option.other.1510377377" valueType="stringList">
+            <listOptionValue value="`pkg-config --libs libglademm-2.4`" builtIn="false"/>
+            <listOptionValue value="`pkg-config --libs gtkmm-2.4`" builtIn="false"/>
+            <listOptionValue value="`sdl-config --libs`" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.link.option.libs" id="gnu.cpp.link.option.libs.736241556" valueType="libs">
+            <listOptionValue value="SDL" builtIn="false"/>
+            <listOptionValue value="GL" builtIn="false"/>
+            <listOptionValue value="GLU" builtIn="false"/>
+            <listOptionValue value="SDL_mixer" builtIn="false"/>
+            <listOptionValue value="pthread" builtIn="false"/>
+            <listOptionValue value="common" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.link.option.paths" id="gnu.cpp.link.option.paths.1270719283" valueType="stringList">
+            <listOptionValue value="../../common/Release" builtIn="false"/>
+          </option>
+        </tool>
+        <tool superClass="cdt.managedbuild.tool.gnu.assembler.exe.release" id="cdt.managedbuild.tool.gnu.assembler.exe.release.624691403" name="GCC Assembler"/>
+        <macros/>
+      </toolChain>
+    </configuration>
+    <macros/>
+  </project>
+</ManagedProjectBuildInfo>

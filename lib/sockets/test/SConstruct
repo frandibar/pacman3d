@@ -1,0 +1,7 @@
+src_files = Split("""
+    main.cpp
+    sockets_test.cpp
+""")
+
+Program('sockets_test', src_files, LIBS='cppunit')
+

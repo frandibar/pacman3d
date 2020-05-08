@@ -1,0 +1,110 @@
+#ifndef __CONNECTSCREEN_H__
+#define __CONNECTSCREEN_H__
+#include "common/gladehelper.h"
+#include "common/socketprotocol.h"
+#include "clientutilities.h"
+#include "xmlconfigclient.h"
+#include <gtkmm.h>
+#include <glade/glade.h>
+#include <libglademm.h>
+#include <string>
+using std::string;
+
+/**Clase que lanza un screen para ingresar los parametros del cliente
+ * Permite conectarse al server y cargar en el juego la conguracion elegida (teclas y mensajes chat)
+*/
+class ConnectScreen {
+  private:
+    static const int ACCEPT_WAIT;
+    static const string STR_MODERN;
+    static const string STR_CLASSIC;
+    static const string GLADE_FILE;
+    SocketProtocol *_socket;
+    GladeHelper *_gladeHelper;
+    bool _connected;
+    tSoundType _sound;
+    string _playerName;
+    Glib::RefPtr<Gnome::Glade::Xml> _xml;
+    tConfigClient _config;
+    
+    //ventana
+    Gtk::Window* _window;
+    Gtk::Window* _windowWelcome;
+    Gtk::Entry* _serverEntry;
+    Gtk::SpinButton* _portSpin;
+    Gtk::ComboBox* _soundCombo;
+    Gtk::Entry* _nameEntry;
+    Gtk::Button* _btnConnect;
+    Gtk::EventBox* _eventboxMsg;
+    Gtk::EventBox* _eventboxMove;
+    //mensajes
+    Gtk::Window* _windowMsg;
+    Gtk::Entry* _entryF4;
+    Gtk::Entry* _entryF5;
+    Gtk::Entry* _entryF6;
+    Gtk::Entry* _entryF7;
+    Gtk::Entry* _entryF8;
+    Gtk::Entry* _entryF9;
+    Gtk::Entry* _entryF10;
+    Gtk::Entry* _entryF11;
+    Gtk::Button* _btnMsgOK;
+    //welcome
+    Gtk::Button *_btnWelcomePlay;
+    //teclas
+    Gtk::Window* _windowMove;
+    Gtk::ComboBox* _comboForward;
+    Gtk::ComboBox* _comboTurnBack;
+    Gtk::ComboBox* _comboLeft;
+    Gtk::ComboBox* _comboRight;
+    Gtk::Button* _btnMoveOK;
+
+    void on_btnWelcomePlay_show();
+    void on_btnConnect_clicked();
+    void on_btnMsgOK_clicked();
+    void on_btnMoveOK_clicked();
+    bool on_eventboxMsg_press(GdkEventButton* event);
+    bool on_eventboxMove_press(GdkEventButton* event);
+    bool on_eventboxMsg_enter_notify(GdkEventCrossing* event);
+    bool on_eventboxMove_enter_notify(GdkEventCrossing* event);
+    bool on_eventboxMove_leave_notify(GdkEventCrossing* event);
+    bool on_eventboxMsg_leave_notify(GdkEventCrossing* event);
+
+
+    void showWelcome();
+    bool validate();
+    void loadWidgetsMsg();
+    void loadWidgetsMove();
+    void addKey(Glib::RefPtr<Gtk::ListStore> &refListStore,const SDLKey &key,const string &desc);
+    void populateKeyCombos();
+  protected:
+    class ModelColumns : public Gtk::TreeModelColumnRecord {
+      public:
+        ModelColumns() {
+          add(col_sdlkey);
+          add(col_desc);
+        }
+        Gtk::TreeModelColumn<int> col_sdlkey;
+        Gtk::TreeModelColumn<string> col_desc;
+    };
+    ModelColumns _model;
+  public:
+    ///constructor que lanza pantalla
+    ConnectScreen(int &argc, char **argv);
+    ///destructor
+    ~ConnectScreen();
+    ///devuelve si esta conectado al server
+    bool connected() const {return _connected;}
+    ///devuelve el tipo de sonido escogido
+    tSoundType getSoundType() const {return _sound;}
+    ///devuelve el nombre elegido por el jugador
+    string getPlayerName() const {return _playerName;}
+    ///devuelve los mensajes chat a enviar con cada tecla
+    ShortcutMap getShortcuts() const;
+    ///devuelve las teclas a utilizar para moverse en el mapa
+    tMovementKeys getMovementKeys();
+    /**devuelve socket utilizado para conectarse con server
+     *IMPORTANTE el que invoca se ocupa de hacer DELETE del SocketClient*
+     */
+    SocketProtocol* getSocket() const {return _socket;}
+};
+#endif

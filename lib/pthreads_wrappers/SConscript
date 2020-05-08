@@ -1,0 +1,12 @@
+Import('env')
+
+newEnv = env.Clone()
+
+target = 'pthreads_wrappers'
+
+src_files = Split("""
+    mutex.cpp
+    thread.cpp
+""")
+
+newEnv.SharedLibrary(target, src_files)

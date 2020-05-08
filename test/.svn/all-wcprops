@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/pacman3D/!svn/ver/174/test
+END
+xml_tester_02.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/pacman3D/!svn/ver/34/test/xml_tester_02.cpp
+END
+demo.world
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/pacman3D/!svn/ver/91/test/demo.world
+END
+testprotocolclient.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/pacman3D/!svn/ver/123/test/testprotocolclient.cpp
+END
+test_managers.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/pacman3D/!svn/ver/84/test/test_managers.cpp
+END
+demo2.world
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/pacman3D/!svn/ver/174/test/demo2.world
+END
+xml_tester.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/pacman3D/!svn/ver/34/test/xml_tester.cpp
+END
+testprotocolserver.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/pacman3D/!svn/ver/123/test/testprotocolserver.cpp
+END
+demoMap2.map
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/pacman3D/!svn/ver/174/test/demoMap2.map
+END
+demoMap.map
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/pacman3D/!svn/ver/91/test/demoMap.map
+END

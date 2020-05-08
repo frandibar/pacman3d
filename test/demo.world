@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--PacMan3D World-->
+<world>
+    <levels>
+        <level speed="low" map="/home/user/taller/grupal/server_main/src/test/demoMap.map" />
+    </levels>
+</world>

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/pacman3D/!svn/ver/223/editor
+END
+tablemanager.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/pacman3D/!svn/ver/214/editor/tablemanager.h
+END
+mapcell.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/pacman3D/!svn/ver/223/editor/mapcell.cpp
+END
+editorscreen.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/pacman3D/!svn/ver/214/editor/editorscreen.h
+END
+mapcell.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/pacman3D/!svn/ver/214/editor/mapcell.h
+END
+editorscreen.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/pacman3D/!svn/ver/223/editor/editorscreen.cpp
+END
+tablemanager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/pacman3D/!svn/ver/164/editor/tablemanager.cpp
+END

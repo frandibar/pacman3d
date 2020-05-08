@@ -1,0 +1,39 @@
+#ifndef __PACKET_H__
+#define __PACKET_H__
+#include "common/header.h"
+
+/**
+ * El packet representa una unidad de informacion para ser transferida entre cliente y servidor
+ * El packet consta de un header y un body
+ */
+class Packet {
+	
+  private:
+    Header _header;
+    unsigned char* _body;
+    int _bodylen;
+    
+  public:
+  	/// constructor vacio
+    Packet():_body(0){};
+    /// constructor con parametros
+    Packet(const unsigned char &version,const tPacketType &type,const unsigned char &aux,unsigned char *body,int bodylen);
+    ///destructor
+    ~Packet();
+    ///constructor de copia
+    Packet(const Packet &packet);
+    ///operador de asignacion
+    Packet& operator=(const Packet& packet);
+    ///devuelve el header
+    Header getHeader() const {return _header;}
+    ///asigna un header
+    void setHeader(const Header &header);
+    ///devuelve el cuerpo
+    unsigned char* getBody() const {return _body;}
+    ///devuelve la longitud del cuerpo
+    int getBodyLength() const {return _bodylen;}
+    ///asigna el cuerpo
+    void setBody(unsigned char *body,int bodylen);
+};
+
+#endif

@@ -1,0 +1,185 @@
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/pacman3D/!svn/ver/224/client
+END
+soundmanager.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/pacman3D/!svn/ver/196/client/soundmanager.h
+END
+client.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/pacman3D/!svn/ver/215/client/client.h
+END
+xmlconfigclient.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/pacman3D/!svn/ver/215/client/xmlconfigclient.h
+END
+Maze.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/pacman3D/!svn/ver/223/client/Maze.cpp
+END
+threadpacketreceiver.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/pacman3D/!svn/ver/213/client/threadpacketreceiver.h
+END
+soundplayer.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/pacman3D/!svn/ver/196/client/soundplayer.h
+END
+Player.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/pacman3D/!svn/ver/211/client/Player.h
+END
+MappedObject.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/pacman3D/!svn/ver/170/client/MappedObject.cpp
+END
+.cdtbuild
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/pacman3D/!svn/ver/202/client/.cdtbuild
+END
+client.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/pacman3D/!svn/ver/215/client/client.cpp
+END
+Pill.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/pacman3D/!svn/ver/180/client/Pill.cpp
+END
+.cdtproject
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/pacman3D/!svn/ver/2/client/.cdtproject
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/pacman3D/!svn/ver/2/client/.project
+END
+xmlconfigclient.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/pacman3D/!svn/ver/215/client/xmlconfigclient.cpp
+END
+clientutilities.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/pacman3D/!svn/ver/215/client/clientutilities.h
+END
+connectscreen.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/pacman3D/!svn/ver/223/client/connectscreen.cpp
+END
+Controls.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/pacman3D/!svn/ver/215/client/Controls.h
+END
+Pill.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/pacman3D/!svn/ver/180/client/Pill.h
+END
+connectscreen.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/pacman3D/!svn/ver/215/client/connectscreen.h
+END
+Player.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/pacman3D/!svn/ver/223/client/Player.cpp
+END
+soundplayer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/pacman3D/!svn/ver/196/client/soundplayer.cpp
+END
+graphicupdater.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/pacman3D/!svn/ver/224/client/graphicupdater.cpp
+END
+MappedObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/pacman3D/!svn/ver/44/client/MappedObject.h
+END
+graphicupdater.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/pacman3D/!svn/ver/215/client/graphicupdater.h
+END
+SDLHelpers.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/pacman3D/!svn/ver/196/client/SDLHelpers.h
+END
+SDLHelpers.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/pacman3D/!svn/ver/180/client/SDLHelpers.cpp
+END
+Controls.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/pacman3D/!svn/ver/223/client/Controls.cpp
+END
+soundmanager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/pacman3D/!svn/ver/223/client/soundmanager.cpp
+END
+threadpacketreceiver.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/pacman3D/!svn/ver/213/client/threadpacketreceiver.cpp
+END
+Maze.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/pacman3D/!svn/ver/219/client/Maze.h
+END

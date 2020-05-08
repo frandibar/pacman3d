@@ -1,0 +1,1055 @@
+#include "editorscreen.h"
+#include <xmlworld.h>
+#include <xmlmap.h>
+#include <debug.h>
+#include <gtkmm/dialog.h>
+
+const string dir = "/etc/Pacman3D/";
+const string EditorScreen::GLADE_FILE = "/etc/Pacman3D/img/editor.glade";
+const string EditorScreen::SPEED_LOW = "Low";
+const string EditorScreen::SPEED_MEDIUM = "Medium";
+const string EditorScreen::SPEED_HIGH = "High";
+
+const int EditorScreen::SIZE_SMALL = 16;
+const int EditorScreen::SIZE_MEDIUM = 20;
+const int EditorScreen::SIZE_LARGE = 24;
+const int EditorScreen::SIZE_GIANT = 32;
+const tCell EditorScreen::DEFAULT_CELL = cPACMAN_START;
+
+const string EditorScreen::imageFiles[IMAGE_FILES] = { "img/bigpacman.png", "img/bigworld.png", "img/bottom.png",
+    "img/canceled.bmp", "img/cherry.bmp", "img/down.png", "img/error.gif",
+    "img/help.png", "img/houseE.bmp", "img/houseN.bmp", "img/houseS.bmp", "img/houseW.bmp",
+    "img/info.gif", "img/none.bmp", "img/pacman.bmp", "img/pill.bmp", "img/powerup.bmp", "img/top.png",
+    "img/tunnelH.bmp", "img/tunnelV.bmp", "img/up.png" , "img/wall.bmp", "img/warning.gif",
+    "img/world.gif"};
+
+EditorScreen::EditorScreen(int &argc, char **argv):_worldSaveFile("") 
+{
+    //primero validamos que los archivos que vamos a utilizar existen
+    for ( int i = 0; i < IMAGE_FILES ; ++i){
+        if ( !fileExists( dir + imageFiles[i] ) ){
+            std::cerr << "Error while loading." << std::endl;
+            std::cerr << "File: " << imageFiles[i] << " does not exist." << std::endl;
+            return;
+        }
+    }	
+
+    //AGREGADO
+    _graphMap = 0;
+    _gh = 0;
+    _saveMapAs = false;
+    _worldChanged = false;
+    //FIN AGREGADO
+
+    _size = SIZE_SMALL;
+    _invalidSize = true;
+    Gtk::Main kit(argc,argv);
+
+    //carga xml de glade
+    if ( !fileExists(GLADE_FILE) ){
+        std::cerr << "Error while loading." << std::endl;
+        std::cerr << "Glade file ( " << GLADE_FILE << " ) does not exist." << std::endl;
+        return;
+    }
+    try{
+        _xml = Gnome::Glade::Xml::create(GLADE_FILE);
+    }catch( Gnome::Glade::XmlError& error){
+        informInvalidGladeFile();
+        return;
+    }
+    if ( !loadHomeWidgets() ){
+        informInvalidGladeFile();
+        return;
+    }
+    if ( !loadAddMapWidgets() ){
+        informInvalidGladeFile();
+        return;
+    }
+    if ( !loadNewMapWidgets() ) {
+        informInvalidGladeFile();
+        return;
+    }
+    if ( !loadWorldWidgets() ) {
+        informInvalidGladeFile();
+        return;
+    }
+    if ( !loadMapWidgets() ) {
+        informInvalidGladeFile();
+        return;
+    }
+    _gladeHelper = new GladeHelper;
+    Gtk::Main::run(*_windowHome);
+}
+
+EditorScreen::~EditorScreen() 
+{
+    //AGREGADO
+    delete _graphMap;
+    delete _gh;
+    delete _tm;
+    //FIN AGREGADO
+    delete _gladeHelper;
+}
+
+void EditorScreen::informInvalidGladeFile()
+{
+    std::cerr << "Error while loading." << std::endl;
+    std::cerr << "Invalid Glade File." << std::endl << GLADE_FILE << " must be corrupt." << std::endl;	
+}
+
+void EditorScreen::initializeGraphAndHandler(int rows, int columns)
+{	
+    delete _gh;
+    delete _graphMap;	
+    _graphMap = new PacManMap(columns, rows);
+    _gh = new GraphHandler(*_graphMap);
+}
+
+bool EditorScreen::loadMapWidgets() 
+{
+    _xml->get_widget("windowMap",_windowMap);
+    if ( _windowMap == NULL ) return false;
+    _windowMap->signal_delete_event().connect( sigc::mem_fun(*this,&EditorScreen::on_closeWindowMap_clicked) );
+    _windowMapTitle = _windowMap->get_title();
+    _xml->get_widget("frameMap",_frameMap);
+    if ( _frameMap == NULL ) return false;
+    //elementos
+    _xml->get_widget("toolbarElements",_toolbarElements);
+    if ( _toolbarElements == NULL ) return false;
+    _xml->get_widget("btnPill",_btnPill);
+    if ( _btnPill == NULL ) return false;
+    _btnPill->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnPill_clicked));
+    _xml->get_widget("btnPowerUp",_btnPowerUp);
+    if ( _btnPowerUp == NULL ) return false;
+    _btnPowerUp->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnPowerUp_clicked));
+    _xml->get_widget("btnBonus",_btnBonus);
+    if ( _btnBonus == NULL ) return false;
+    _btnBonus->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnBonus_clicked));
+    _xml->get_widget("btnGhostHouseNorth",_btnGhostHouseN);
+    if ( _btnGhostHouseN == NULL ) return false;
+    _btnGhostHouseN->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnGhostHouseN_clicked));
+    _xml->get_widget("btnGhostHouseEast",_btnGhostHouseE);
+    if ( _btnGhostHouseE == NULL ) return false;
+    _btnGhostHouseE->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnGhostHouseE_clicked));
+    _xml->get_widget("btnGhostHouseSouth",_btnGhostHouseS);
+    if ( _btnGhostHouseS == NULL ) return false;
+    _btnGhostHouseS->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnGhostHouseS_clicked));
+    _xml->get_widget("btnGhostHouseWest",_btnGhostHouseW);
+    if ( _btnGhostHouseW == NULL ) return false;
+    _btnGhostHouseW->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnGhostHouseW_clicked));
+    _xml->get_widget("btnPacmanStart",_btnPacmanStart);
+    if ( _btnPacmanStart == NULL ) return false;
+    _btnPacmanStart->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnPacmanStart_clicked));
+    _xml->get_widget("btnGateH",_btnGateH);
+    if ( _btnGateH == NULL ) return false;
+    _btnGateH->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnGateH_clicked));
+    _xml->get_widget("btnGateV",_btnGateV);
+    if ( _btnGateV == NULL ) return false;
+    _btnGateV->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnGateV_clicked));
+    _xml->get_widget("btnEmpty",_btnEmpty);
+    if ( _btnEmpty == NULL ) return false;
+    _btnEmpty->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnEmpty_clicked));
+    _xml->get_widget("btnWall",_btnWall);
+    if ( _btnWall == NULL ) return false;
+    _btnWall->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnWall_clicked));
+    //manejo de mapas
+    _xml->get_widget("btnNewMap",_btnNewMap);
+    if ( _btnNewMap == NULL ) return false;
+    _btnNewMap->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnNewMap_clicked));
+    _xml->get_widget("btnOpenMap",_btnOpenMap);
+    if ( _btnOpenMap == NULL ) return false;
+    _btnOpenMap->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnOpenMap_clicked));
+    _xml->get_widget("btnSaveMap",_btnSaveMap);
+    if ( _btnSaveMap == NULL ) return false;
+    _btnSaveMap->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnSaveMap_clicked));
+    _xml->get_widget("btnSaveAsMap",_btnSaveAsMap);
+    if ( _btnSaveAsMap == NULL ) return false;
+    _btnSaveAsMap->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnSaveAsMap_clicked));
+    _xml->get_widget("btnMapHome",_btnMapHome);
+    if ( _btnMapHome == NULL ) return false;
+    _btnMapHome->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnMapHome_clicked));
+
+    //AGREGADO
+    _xml->get_widget("table",_table);
+    if ( _table == NULL ) return false;
+    initializeGraphAndHandler(_table->property_n_rows(), _table->property_n_columns());  
+    _tm = new TableManager(_gh, _windowMap, _table, DEFAULT_CELL);
+    //FIN AGREGADO
+    return true;
+}
+
+bool EditorScreen::loadWorldWidgets() 
+{
+    _xml->get_widget("windowWorld",_windowWorld);
+    if ( _windowWorld == NULL ) return false;
+    //conecto con el evento de salida para que pregunte si quiere retirarse
+    _windowWorld->signal_delete_event().connect( sigc::mem_fun(*this,&EditorScreen::on_closeWindowWorld_clicked) );
+    //obtengo el titulo de la ventana y le seteo uno para cuando entra por primera vez
+    _windowWorldTitle = _windowWorld->get_title();
+    _windowWorld->set_title(_windowWorldTitle + " - [New World]");
+
+    _xml->get_widget("treeviewMaps",_treeviewMaps);
+    if ( _treeviewMaps == NULL ) return false;
+    _refListStore = Gtk::ListStore::create(_model);
+    _treeviewMaps->set_model(_refListStore);
+    _treeviewMaps->append_column("Level", _model.col_level);
+    _treeviewMaps->append_column("Directory path", _model.col_dirpath);
+    _treeviewMaps->append_column("Name", _model.col_name);
+    _treeviewMaps->append_column("Speed", _model.col_speedtext);
+    _xml->get_widget("btnMapAdd",_btnMapAdd);
+    if ( _btnMapAdd == NULL ) return false;
+    _btnMapAdd->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnMapAdd_clicked));
+    _xml->get_widget("btnMapDelete",_btnMapDelete);
+    if ( _btnMapDelete == NULL ) return false;
+    _btnMapDelete->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnMapDelete_clicked));
+    _xml->get_widget("btnMapTop",_btnMapTop);
+    if ( _btnMapTop == NULL ) return false;
+    _btnMapTop->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnMapTop_clicked));
+    _xml->get_widget("btnMapUp",_btnMapUp);
+    if ( _btnMapUp == NULL ) return false;
+    _btnMapUp->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnMapUp_clicked));
+    _xml->get_widget("btnMapDown",_btnMapDown);
+    if ( _btnMapDown == NULL ) return false;
+    _btnMapDown->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnMapDown_clicked));
+    _xml->get_widget("btnMapBottom",_btnMapBottom);
+    if ( _btnMapBottom == NULL ) return false;
+    _btnMapBottom->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnMapBottom_clicked));
+    _xml->get_widget("btnNewWorld",_btnNewWorld);
+    if ( _btnNewWorld == NULL ) return false;
+    _btnNewWorld->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnNewWorld_clicked));
+    _xml->get_widget("btnOpenWorld",_btnOpenWorld);
+    if ( _btnOpenWorld == NULL ) return false;
+    _btnOpenWorld->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnOpenWorld_clicked));
+    _xml->get_widget("btnSaveWorld",_btnSaveWorld);
+    if ( _btnSaveWorld == NULL ) return false;
+    _btnSaveWorld->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnSaveWorld_clicked));
+    _xml->get_widget("btnSaveAsWorld",_btnSaveAsWorld);
+    if ( _btnSaveAsWorld == NULL ) return false;
+    _btnSaveAsWorld->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnSaveAsWorld_clicked));
+    _xml->get_widget("btnWorldHome",_btnWorldHome);
+    if ( _btnWorldHome == NULL ) return false;
+    _btnWorldHome->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnWorldHome_clicked));
+    return true;
+}
+
+bool EditorScreen::loadHomeWidgets() 
+{
+    _xml->get_widget("windowHome",_windowHome);
+    if ( _windowHome == NULL ) return false;
+    _xml->get_widget("btnHomeClose",_btnHomeClose);
+    if (_btnHomeClose  == NULL ) return false;
+    _btnHomeClose->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnHomeClose_clicked));
+
+    _xml->get_widget("eventboxMap",_eventboxMap);
+    if ( _eventboxMap == NULL ) return false;
+    //_eventboxMap->set_events(Gdk::BUTTON_PRESS_MASK | Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK);
+    _eventboxMap->signal_button_press_event().connect(sigc::mem_fun(*this, &EditorScreen::on_eventboxMap_press));
+    _eventboxMap->signal_enter_notify_event().connect(sigc::mem_fun(*this, &EditorScreen::on_eventboxMap_enter_notify));
+    _eventboxMap->signal_leave_notify_event().connect(sigc::mem_fun(*this, &EditorScreen::on_eventboxMap_leave_notify));
+
+    _xml->get_widget("eventboxWorld",_eventboxWorld);
+    if ( _eventboxWorld == NULL ) return false;
+    //_eventboxWorld->set_events(Gdk::BUTTON_PRESS_MASK | Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK);
+    _eventboxWorld->signal_button_press_event().connect(sigc::mem_fun(*this, &EditorScreen::on_eventboxWorld_press));
+    _eventboxWorld->signal_enter_notify_event().connect(sigc::mem_fun(*this, &EditorScreen::on_eventboxWorld_enter_notify));
+    _eventboxWorld->signal_leave_notify_event().connect(sigc::mem_fun(*this, &EditorScreen::on_eventboxWorld_leave_notify));
+    return true;
+
+}
+
+bool EditorScreen::loadAddMapWidgets() 
+{
+    _xml->get_widget("windowAddMap",_windowAddMap);
+    if ( _windowAddMap == NULL ) return false;
+    _xml->get_widget("lblMapFile",_lblMapFile);
+    if ( _lblMapFile == NULL ) return false;
+    _lblMapFileTitle = _lblMapFile->get_text();
+    _xml->get_widget("btnAddBrowse",_btnAddBrowse);
+    if ( _btnAddBrowse == NULL ) return false;
+    _btnAddBrowse->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnAddBrowse_clicked));
+    _xml->get_widget("comboSpeed",_speedCombo);
+    if ( _speedCombo == NULL ) return false;
+    _speedCombo->set_active(0);
+    _xml->get_widget("btnAddOK",_btnAddOK);
+    if ( _btnAddOK == NULL ) return false;
+    _btnAddOK->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnAddOK_clicked));
+    _xml->get_widget("btnAddClose",_btnAddClose);
+    if ( _btnAddClose == NULL ) return false;
+    _btnAddClose->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnAddClose_clicked));
+    return true;
+}
+
+bool EditorScreen::loadNewMapWidgets() 
+{
+    _xml->get_widget("windowNewMap",_windowNewMap);
+    if ( _windowNewMap == NULL ) return false;
+    _xml->get_widget("btnNext",_btnNext);
+    if ( _btnNext == NULL ) return false;
+    _btnNext->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_btnNext_clicked));
+    //radio buttons
+    _xml->get_widget("radioSmall",_radioSmall);
+    if ( _radioSmall == NULL ) return false;
+    _radioSmall->set_label("Small(" + StringConverter< int > (SIZE_SMALL) +"x" + StringConverter< int > (SIZE_SMALL) + ")");
+    _radioSmall->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_radioSmall_clicked));
+    _xml->get_widget("radioMedium",_radioMedium);
+    if ( _radioMedium == NULL ) return false;
+    _radioMedium->set_label("Medium(" + StringConverter< int > (SIZE_MEDIUM) +"x" + StringConverter< int > (SIZE_MEDIUM) +")");
+    _radioMedium->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_radioMedium_clicked));
+    _xml->get_widget("radioLarge",_radioLarge);
+    if (_radioLarge  == NULL ) return false;
+    _radioLarge->set_label("Large(" + StringConverter< int > (SIZE_LARGE) + "x" + StringConverter< int > (SIZE_LARGE) + ")");
+    _radioLarge->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_radioLarge_clicked));
+    _xml->get_widget("radioGiant",_radioGiant);
+    if (_radioGiant  == NULL ) return false;
+    _radioGiant->set_label("Giant(" + StringConverter< int > (SIZE_GIANT) + "x" + StringConverter< int > (SIZE_GIANT) + ")");
+    _radioGiant->signal_clicked().connect(sigc::mem_fun(*this,&EditorScreen::on_radioGiant_clicked));
+    return true;
+}
+
+bool EditorScreen::on_closeWindowMap_clicked(GdkEventAny * event)
+{
+    return ( !discardMapChanges() );//si acepta descartar, devuelve true, por lo que negado da false y sale
+}
+
+bool EditorScreen::on_closeWindowWorld_clicked(GdkEventAny * event){
+    return ( !discardWorldChanges() );//si acepta descartar, devuelve true, por lo que negado da false y sale
+}
+
+void EditorScreen::on_btnPill_clicked() 
+{
+    _tm->setActualCell(cPILL);
+}
+
+void EditorScreen::on_btnBonus_clicked() 
+{
+    _tm->setActualCell(cBONUS);
+}
+
+void EditorScreen::on_btnPowerUp_clicked() 
+{
+    _tm->setActualCell(cPOWER_UP);
+}
+
+void EditorScreen::on_btnGhostHouseN_clicked() 
+{
+    _tm->setActualCell(cGHOUSE_N);
+}
+
+void EditorScreen::on_btnGhostHouseE_clicked() 
+{
+    _tm->setActualCell(cGHOUSE_E);
+}
+
+void EditorScreen::on_btnGhostHouseS_clicked() 
+{
+    _tm->setActualCell(cGHOUSE_S);
+}
+
+void EditorScreen::on_btnGhostHouseW_clicked() 
+{
+    _tm->setActualCell(cGHOUSE_W);
+}
+
+void EditorScreen::on_btnPacmanStart_clicked() 
+{
+    _tm->setActualCell(cPACMAN_START);
+}
+
+void EditorScreen::on_btnGateH_clicked() 
+{
+    _tm->setActualCell(cGATE_H);
+}
+
+void EditorScreen::on_btnGateV_clicked() 
+{
+    _tm->setActualCell(cGATE_V);
+}
+
+void EditorScreen::on_btnWall_clicked() 
+{
+    _tm->setActualCell(cWALL);
+}
+
+void EditorScreen::on_btnEmpty_clicked() 
+{
+    _tm->setActualCell(cEMPTY);
+}
+
+//add map
+void EditorScreen::on_btnAddBrowse_clicked() 
+{
+    //abre ventana para seleccionar mapa a importar
+    string filename("");
+    if (_gladeHelper->showFileChooserDialog(*_windowAddMap,false,"Select Map File...","Map files | *.map","*.map",filename)) {
+        _lblMapFile->set_text(filename);
+    }
+}
+
+void EditorScreen::addMapToTreeView(const string &path, int speed) 
+{
+    Gtk::TreeModel::iterator iter = _refListStore->append();
+    Gtk::TreeModel::Row row = *iter;
+    string dirpath (path,0,path.find_last_of('/')+1);
+    row[_model.col_level] = _refListStore->children().size();
+    row[_model.col_dirpath] = dirpath;
+    string name(path,path.find_last_of('/')+1);
+    row[_model.col_name] = name;
+    row[_model.col_speed] = speed;
+    switch (speed) {
+        case 0:
+            row[_model.col_speedtext] = "Low";
+            break;
+        case 1:
+            row[_model.col_speedtext] = "Medium";
+            break;
+        case 2:
+            row[_model.col_speedtext] = "High";
+    }
+}
+
+void EditorScreen::on_btnAddOK_clicked() 
+{
+    _speedCombo->show();
+    if (_lblMapFile->get_text() == "") {
+        _gladeHelper->showWarningDialog(*_windowAddMap,"Map file is missing!","Select a map file.");
+        return;
+    }
+
+    // Validamos que el archivo sea un Map valido:
+    string errormsg;
+    if (! validateXmlMapFile(_lblMapFile->get_text(), errormsg)) {
+        _gladeHelper->showWarningDialog(*_windowAddMap,"Invalid Map file", errormsg);
+        return;
+    }
+
+    addMapToTreeView(_lblMapFile->get_text(),_speedCombo->get_active_row_number());
+    //oculta modal
+    _windowAddMap->hide();
+    _lblMapFile->set_text(_lblMapFileTitle);
+    _speedCombo->set_active(0);
+    _treeviewMaps->columns_autosize();
+
+    //AGREGADO.. setea en modificado
+    _worldChanged = true;
+}
+
+void EditorScreen::on_btnAddClose_clicked() 
+{
+    _windowAddMap->hide();
+}
+
+bool EditorScreen::discardMapChanges()
+{
+    //Para saber si no se arrepiente de guardar los cambios
+    if ( ! _tm->isEmpty() ){// si hay algo en el mapa
+        if ( ! _tm->isSaved() ){// si no lo han salvado
+            if ( !_gladeHelper->showYesNoDialog(*_windowMap,"Map modified","Are you sure that you want to discard changes?") )
+                return false;
+        }
+    }
+    //sino, eligio que quiere descartarlas, o ya esta salvado, o estaba vacio
+    return true;
+}
+
+//editor
+void EditorScreen::on_btnNewMap_clicked() 
+{
+
+    if ( !discardMapChanges() )//si no quiere descartar los cambios, salgo
+        return;
+
+    _invalidSize = true;
+    _windowNewMap->show();
+    Gtk::Main::run(*_windowNewMap);
+    if (_invalidSize == true) {
+        if ( !_tm->hasStarted() ){
+            _toolbarElements->hide();
+            _frameMap->hide();
+        }
+        return;
+    }
+
+    _windowMap->set_title(_windowMapTitle + " - [New Map]");  
+
+    _toolbarElements->show();
+    _frameMap->show();
+}
+
+bool EditorScreen::loadTable(PacManMap* graphMap)
+{
+
+    Vertex* vertex = NULL;
+    VertexList* vertices = graphMap->getVertices();
+    VertexList::iterator it;
+    for ( it = vertices->begin() ; it != vertices->end() ; ++it){
+        vertex = (*it);
+        tCell cellType;
+        if ( vertex->getContent() ){
+            switch (vertex->getContent()->getType()){
+                case PACMAN_START:{
+                                      cellType = cPACMAN_START;
+                                      break;
+                                  }
+                case PILL:{
+                              cellType = cPILL;
+                              break;
+                          }
+                case POWER_UP:{
+                                  cellType = cPOWER_UP;
+                                  break;
+                              }
+                case BONUS:{
+                               cellType = cBONUS;
+                               break;
+                           }
+                case GHOST_HOUSE:{
+                                     switch ( vertex->getContent()->getOrientation() ){
+                                         case NORTH:{
+                                                        cellType = cGHOUSE_N;
+                                                        break;
+                                                    }
+                                         case EAST:{
+                                                       cellType = cGHOUSE_E;
+                                                       break;
+                                                   }
+                                         case SOUTH:{
+                                                        cellType = cGHOUSE_S;
+                                                        break;
+                                                    }
+                                         case WEST:{
+                                                       cellType = cGHOUSE_W;
+                                                       break;
+                                                   }
+                                     }					
+                                     break;
+                                 }
+            }
+        }else{//si es null entonces esta vacio el vertice. Puede ser o no un portal
+            switch( _gh->portalType(vertex) ){
+                case HORIZONTAL_p:{
+                                      cellType = cGATE_H;
+                                      break;	
+                                  }
+                case VERTICAL_p:{
+                                    cellType = cGATE_V;
+                                    break;	
+                                }
+                case NONE_p:{
+                                cellType = cEMPTY;
+                                break;
+                            }
+            }			
+        }
+        //una vez que tengo el cellType, puedo intentar colocarlo
+        if ( !_tm->changeVertexAndImage(vertex->getID(), cellType ) ){
+            //si no pudo colocarlo, hubo un error, por lo que debo avisar y salir
+            _gladeHelper->showErrorDialog(*_windowMap, "Error Loading Map.","Map file must be corrupt.");
+            delete vertices;
+            return false;	
+        }		
+    }	
+    //libero memoria de vertices
+    delete vertices;
+    //reseteo los dibujados para poder empezar a dibujar
+    _tm->resetDrawn();
+    return true;
+}
+
+void EditorScreen::on_btnOpenMap_clicked() 
+{
+    //tengo que preguntar si no quiere guardar cambios
+    if ( !discardMapChanges() )//si no quiere descartar los cambios, salgo
+        return;
+    //elige mapa
+    string filename("");
+    if (!_gladeHelper->showFileChooserDialog(*_windowMap,false,"Select Map File...","Map files | *.map","*.map",filename))
+        return;  
+    //entonces levanto el mapa (grafo) de memoria
+    PacManMap* graphMap = NULL;
+    try {
+        graphMap = XmlMap::Load(filename);//lo levanto aparte  	
+    }
+    catch (string & error){
+        _gladeHelper->showErrorDialog(*_windowMap,"Invalid Map file", error);
+        return;
+    }
+    //tengo que reiniciar todo. El GraphHandler, el PacMAnMap, y el TableManager
+    //obtengo el size primero
+    _size = graphMap->getHeight();
+    //reinicializo el grafo y el handler con esas dimensiones
+    initializeGraphAndHandler(_size, _size);
+    //reinicio el tableManager
+    _tm->changeGraphHandler(_gh);  	
+    _tm->reset(_size, _size);
+    //ahora que tengo todo en cero, puedo pasar todos los elementos
+    if ( !loadTable(graphMap) ){//si hubo algun problema al cargar los elementos en el table
+        //reinicio el table a cero y muestro un mensaje de error
+        //reinicializo el grafo y el handler con esas dimensiones
+        initializeGraphAndHandler(_size, _size);
+        //reinicio el tableManager
+        _tm->changeGraphHandler(_gh);  	
+        _tm->reset(_size, _size);
+    }else{//si SI se pudo abrir..
+        //ahora que pude abrirlo, seteo el nombre para que salve en ese mismo
+        _mapSaveFile = filename;
+        //seteo como salvado, porque lo acabo de abrir..
+        _tm->setSaved(true);
+        _windowMap->set_title(_windowMapTitle + " - [ " + filename +" ]" ); 
+    }
+    _toolbarElements->show();
+    _frameMap->show();
+    delete graphMap;
+}
+
+bool EditorScreen::isValidMap()
+{
+    //VALIDACIONES PARA EL GRAFO
+    int errorCode = 0;
+    errorCode = _gh->validateClosedGraph();
+
+    if ( errorCode != 0 ){
+        //muestro el mensaje de error y vuelvo
+        _gladeHelper->showErrorDialog(*_windowMap,"Error designing map.",GraphErrors::getErrorText(errorCode) );
+        return false;
+    }
+    return true;
+}
+
+bool EditorScreen::validateXmlMapFile(const string & path, string & errormsg) 
+{
+
+    bool isValid = true;	
+    try {
+        PacManMap * tempMap = XmlMap::Load(path);
+        isValid = tempMap->isValid(errormsg);
+        delete tempMap;
+    } catch(string & e) {
+        errormsg = e;
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+void EditorScreen::on_btnSaveMap_clicked() 
+{
+
+    if ( !_saveMapAs ){//si no pidieron save as, tengo que validar y tal vez pedir el nombre
+        if ( !isValidMap() )
+            return;
+
+        //se fija si tiene archivo donde guardar
+        if (_mapSaveFile.compare("") == 0) {
+            //elige map
+            string filename("");
+            if (!_gladeHelper->showFileChooserDialog(*_windowMap,true,"Save Map File...","Map files | *.map","*.map",filename))
+                return;
+            if ( ! endsIn(filename, ".map")  )
+                filename.append(".map");
+            _mapSaveFile.assign(filename);
+        }
+    }//si pidieron save as, la validacion y el nombre ya los tengo 
+
+    //intento salvar
+    try {
+        XmlMap::Save(_mapSaveFile, *_graphMap);
+        _tm->setSaved(true);
+        _windowMap->set_title(_windowMapTitle + " - [ " + _mapSaveFile +" ]" );
+    }
+    catch (string & error){
+        _gladeHelper->showErrorDialog(*_windowMap,"Error saving map file!",error);
+    }
+}
+
+void EditorScreen::on_btnSaveAsMap_clicked() 
+{
+    if ( !isValidMap() )
+        return;
+    //elige map
+    string filename("");
+    if (!_gladeHelper->showFileChooserDialog(*_windowMap,true,"Save Map File...","Map files | *.map","*.map",filename))
+        return;
+    if ( ! endsIn(filename, ".map")  )
+        filename.append(".map");
+    _mapSaveFile.assign(filename);
+    //una vez que tengo el nombre, que lo que hago es pedir que lo guarde
+    _saveMapAs = true;
+    on_btnSaveMap_clicked();
+    _saveMapAs = false;
+}
+
+//world editor
+void EditorScreen::on_btnMapTop_clicked() 
+{
+    //se fija si hay algo seleccionado
+    Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeviewMaps->get_selection();
+    refTreeSelection->set_mode(Gtk::SELECTION_SINGLE);
+    Gtk::TreeModel::iterator iterSelected = refTreeSelection->get_selected();
+    if (!iterSelected)
+        return;
+    //se fija de que no sea el primero
+    Gtk::TreeModel::Row rowSelected = *iterSelected;
+    Gtk::TreeModel::Row rowFirst = *(_refListStore->children().begin());
+    if (rowFirst == rowSelected)
+        return;
+    //agrego nodo al principio
+    Gtk::TreeModel::iterator iterInserted = _refListStore->prepend();
+    //seteo contenido del row seleccionado
+    Gtk::TreeModel::Row row = *iterInserted;
+    row[_model.col_dirpath] = rowSelected.get_value(_model.col_dirpath);
+    row[_model.col_level] = 1;
+    row[_model.col_name] = rowSelected.get_value(_model.col_name);
+    row[_model.col_speed] = rowSelected.get_value(_model.col_speed);
+    row[_model.col_speedtext] = rowSelected.get_value(_model.col_speedtext);
+    //bajo todos un level
+    int counter = 2;
+    for (Gtk::TreeModel::iterator it = _refListStore->children().begin(); it != _refListStore->children().end();++it) {
+        if (it == _refListStore->children().begin())
+            continue;
+        //al encontrar nodo seleccionado
+        if (row == rowSelected)
+            continue;
+        //actualiza numero de level
+        row = *it;
+        row[_model.col_level] = counter;
+        counter++;
+    }
+    //elimina nodo seleccionado
+    _refListStore->erase(iterSelected);
+    refTreeSelection->select(iterInserted);
+
+    //AGREGADO.. setea en modificado
+    _worldChanged = true;
+}
+
+void EditorScreen::on_btnMapUp_clicked() 
+{
+    //se fija si hay algo seleccionado
+    Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeviewMaps->get_selection();
+    refTreeSelection->set_mode(Gtk::SELECTION_SINGLE);
+    Gtk::TreeModel::iterator iterSelected = refTreeSelection->get_selected();
+    if (!iterSelected)
+        return;
+    //se fija de que no sea el primero
+    Gtk::TreeModel::Row rowSelected = *iterSelected;
+    Gtk::TreeModel::Row rowFirst = *(_refListStore->children().begin());
+    if (rowFirst == rowSelected)
+        return;
+    //cambia numero de level
+    Gtk::TreeModel::iterator iterPre = iterSelected;
+    iterPre--;
+    Gtk::TreeModel::Row rowPrevious = *iterPre;
+    rowSelected[_model.col_level] = (int)rowSelected[_model.col_level] - 1;
+    rowPrevious[_model.col_level] = (int)rowPrevious[_model.col_level] + 1;
+    //swapea
+    _refListStore->iter_swap(iterPre,iterSelected);
+
+    //AGREGADO.. setea en modificado
+    _worldChanged = true;
+}
+
+void EditorScreen::on_btnMapDown_clicked() 
+{
+    //se fija si hay algo seleccionado
+    Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeviewMaps->get_selection();
+    refTreeSelection->set_mode(Gtk::SELECTION_SINGLE);
+    Gtk::TreeModel::iterator iterSelected = refTreeSelection->get_selected();
+    if (!iterSelected)
+        return;
+    Gtk::TreeModel::iterator iterPost = iterSelected;
+    iterPost++;
+    if ((!iterPost) && (iterPost == _refListStore->children().end()))
+        return;
+    //swapea
+    _refListStore->iter_swap(iterPost,iterSelected);
+    //cambia numero de level
+    Gtk::TreeModel::Row rowSelected = *iterSelected;
+    Gtk::TreeModel::Row rowNext = *iterPost;
+    int aux = rowSelected[_model.col_level];
+    rowSelected[_model.col_level] = (int)rowNext[_model.col_level];
+    rowNext[_model.col_level] = aux;
+
+    //AGREGADO.. setea en modificado
+    _worldChanged = true;
+}
+
+void EditorScreen::on_btnMapBottom_clicked() 
+{
+    //se fija si hay algo seleccionado
+    Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeviewMaps->get_selection();
+    refTreeSelection->set_mode(Gtk::SELECTION_SINGLE);
+    Gtk::TreeModel::iterator iterSelected = refTreeSelection->get_selected();
+    if (!iterSelected)
+        return;
+    Gtk::TreeModel::Row rowSelected = *iterSelected;
+    //busca nodo seleccionado
+    Gtk::TreeModel::Row row;
+    unsigned int counter = 0;
+    Gtk::TreeModel::iterator it = _refListStore->children().begin();
+    while (it != _refListStore->children().end()) {
+        row = *it;
+        counter++;
+        if (row == rowSelected)
+            break;
+        ++it;
+    }
+    if (counter == _refListStore->children().size())
+        return; //es el ultimo
+    ++it;
+    while (it != _refListStore->children().end()) {
+        row = *it;
+        row[_model.col_level] = counter;
+        counter++;
+        ++it;
+    }
+    it = _refListStore->append();
+    row = *it;
+    row[_model.col_dirpath] = rowSelected.get_value(_model.col_dirpath);
+    row[_model.col_level] = counter;
+    row[_model.col_name] = rowSelected.get_value(_model.col_name);
+    row[_model.col_speed] = rowSelected.get_value(_model.col_speed);
+    row[_model.col_speedtext] = rowSelected.get_value(_model.col_speedtext);
+    _refListStore->erase(iterSelected);
+    refTreeSelection->select(it);
+
+    //AGREGADO.. setea en modificado
+    _worldChanged = true;
+}
+
+void EditorScreen::on_btnMapAdd_clicked() 
+{
+    _windowAddMap->show();
+}
+
+void EditorScreen::on_btnMapDelete_clicked() 
+{
+    //se fija si hay algo seleccionado
+    Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeviewMaps->get_selection();
+    refTreeSelection->set_mode(Gtk::SELECTION_SINGLE);
+    Gtk::TreeModel::iterator iterSelected = refTreeSelection->get_selected();
+    if (!iterSelected) {
+        _gladeHelper->showWarningDialog(*_windowWorld,"Invalid delete!","Select map to delete.");
+        return;
+    }
+    Gtk::TreeModel::Row rowSelected = *iterSelected;
+    Gtk::TreeModel::iterator iter = _refListStore->children().begin();
+    Gtk::TreeModel::Row row = *iter;
+    while (rowSelected != row) {
+        ++iter;
+        row = *iter;
+    }
+    ++iter;//adelanta row seleccionado
+    while (iter != _refListStore->children().end()) {
+        row = *iter;
+        row[_model.col_level] = (int)row[_model.col_level] - 1;
+        ++iter;
+    }
+    _refListStore->erase(iterSelected);
+
+    //AGREGADO.. setea en modificado
+    _worldChanged = true;
+}
+
+bool EditorScreen::discardWorldChanges()
+{
+    if ( _worldChanged ){
+        return _gladeHelper->showYesNoDialog(*_windowMap,"World modified","Are you sure that you want to discard changes?");
+    }
+    return true;//si no cambio, es como si descartara los cambios, no hay que preguntar
+}
+
+void EditorScreen::on_btnNewWorld_clicked() 
+{
+    //pregunta si no desea guardar
+    bool discard = discardWorldChanges();
+    if (discard) {
+        //renueva el nombre
+        _windowWorld->set_title(_windowWorldTitle + " - [New World]");
+        //lo setea en no moficado
+        _worldChanged = false;
+        //vacia mapas
+        _refListStore->clear();
+        _worldSaveFile.assign("");
+        on_btnMapAdd_clicked();
+    }
+}
+
+void EditorScreen::on_btnOpenWorld_clicked() 
+{
+
+    //primero verifico si quiere descartar los cambios si es que los hay
+    if ( !discardWorldChanges() )
+        return;
+
+    //elige mundo
+    string filename("");
+    if (!_gladeHelper->showFileChooserDialog(*_windowWorld,false,"Select World File...","World files | *.world","*.world",filename))
+        return;
+    //vacia mapas
+    _refListStore->clear();
+    //carga mundo
+    MapFileList maps;
+    try {
+        XmlWorld::Load(filename,maps);
+    }
+    catch (string error){
+        _gladeHelper->showErrorDialog(*_windowWorld,"Error loading world file!","Invalid format.");
+        return;
+    }
+    //ahora que pude abrirlo, seteo el nombre para que salve en ese mismo
+    _worldSaveFile = filename;
+    //cambio nombre
+    _windowWorld->set_title(_windowWorldTitle + " - [ " + filename + " ]");
+    //seteo en no modificado
+    _worldChanged = false;
+
+    for (MapFileList::iterator it = maps.begin(); it != maps.end(); ++it) {
+        addMapToTreeView(it->path,(int)(it->speed));
+    }
+}
+
+void EditorScreen::on_btnSaveWorld_clicked() 
+{
+    //se fija si tiene archivo donde guardar
+    if (_worldSaveFile.compare("") == 0) {
+        //elige mundo
+        string filename("");
+        if (!_gladeHelper->showFileChooserDialog(*_windowWorld,true,"Save World File...","World files | *.world","*.world",filename))
+            return;
+        if ( ! endsIn(filename, ".world") )
+            filename.append(".world");
+        _worldSaveFile.assign(filename);
+    }
+    //genera lista de mapas
+    MapFileList maps;
+    for (Gtk::TreeModel::Children::iterator it = _refListStore->children().begin(); it != _refListStore->children().end(); ++it) {
+        Gtk::TreeModel::Row row = *it;
+        tMapFile map;
+        map.path.assign(row[_model.col_dirpath]);
+        map.path.append(row[_model.col_name]);
+        int speed = row[_model.col_speed];
+        map.speed = (tLevelSpeed)speed;
+        maps.push_back(map);
+    }
+    try {
+        XmlWorld::Save(_worldSaveFile,maps);
+    }
+    catch (string error){
+        _gladeHelper->showErrorDialog(*_windowWorld,"Error saving world file!","");
+        return;
+    }
+    //cambio el nombre
+    _windowWorld->set_title(_windowWorldTitle + " - [ " + _worldSaveFile + " ]");
+    //seteo en no modificado
+    _worldChanged = false;
+}
+
+void EditorScreen::on_btnSaveAsWorld_clicked() 
+{
+    //elige mundo
+    string filename("");
+    if (!_gladeHelper->showFileChooserDialog(*_windowWorld,true,"Save World File...","World files | *.world","*.world",filename))
+        return;
+    if ( ! endsIn(filename, ".world") )
+        filename.append(".world");
+    _worldSaveFile.assign(filename);
+    on_btnSaveWorld_clicked();
+}
+
+//radios
+void EditorScreen::on_radioSmall_clicked() 
+{
+    _size = SIZE_SMALL;
+}
+
+void EditorScreen::on_radioMedium_clicked() 
+{
+    _size = SIZE_MEDIUM;
+}
+
+void EditorScreen::on_radioLarge_clicked() 
+{
+    _size = SIZE_LARGE;
+}
+
+void EditorScreen::on_radioGiant_clicked() 
+{
+    _size = SIZE_GIANT;
+}
+
+//new map
+void EditorScreen::on_btnNext_clicked() 
+{
+    _invalidSize = false;
+    //AGREGADO
+    initializeGraphAndHandler(_size, _size);
+    _tm->changeGraphHandler(_gh);
+    _tm->reset(_size, _size);
+    _mapSaveFile = "";
+    //FIN AGREGADO
+    _windowNewMap->hide();
+}
+
+void EditorScreen::on_btnWorldHome_clicked() {  
+    _windowHome->show();
+    _windowWorld->hide();
+    Gtk::Main::run(*_windowHome);
+}
+
+void EditorScreen::on_btnMapHome_clicked() {  
+    _windowHome->show();
+    _windowMap->hide();
+    Gtk::Main::run(*_windowHome);
+}
+
+bool EditorScreen::on_eventboxMap_press(GdkEventButton* event) 
+{
+    _windowMap->show();
+    _windowHome->hide();
+    Gtk::Main::run(*_windowMap);
+    return true;
+}
+
+bool EditorScreen::on_eventboxWorld_press(GdkEventButton* event) 
+{
+    _windowWorld->show();
+    _windowHome->hide();
+    Gtk::Main::run(*_windowWorld);
+    return true;
+}
+
+bool EditorScreen::on_eventboxWorld_enter_notify(GdkEventCrossing* event) 
+{
+    _windowHome->get_window()->set_cursor (Gdk::Cursor(Gdk::HAND1));
+    return true;
+}
+
+
+bool EditorScreen::on_eventboxWorld_leave_notify(GdkEventCrossing* event) 
+{
+    _windowHome->get_window()->set_cursor();
+    return true;
+}
+
+bool EditorScreen::on_eventboxMap_enter_notify(GdkEventCrossing* event) 
+{
+    _windowHome->get_window()->set_cursor (Gdk::Cursor(Gdk::HAND1));
+    return true;
+}
+
+
+bool EditorScreen::on_eventboxMap_leave_notify(GdkEventCrossing* event) 
+{
+    _windowHome->get_window()->set_cursor();
+    return true;
+}
+
+
+void EditorScreen::on_btnHomeClose_clicked() 
+{
+    if ( !discardMapChanges() )
+        return;
+    if ( !discardWorldChanges() )
+        return;
+    Gtk::Main::quit();
+}

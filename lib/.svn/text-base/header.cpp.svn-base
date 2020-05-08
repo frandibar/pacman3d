@@ -1,0 +1,21 @@
+#include "common/header.h"
+
+Header::Header(const unsigned char &version,const tPacketType &type,const unsigned char &aux) {
+  _header = 0;
+  _version = version;
+  _type = type;
+  _aux = aux;
+  _header = _header | (version << 6);
+  _header = _header | (type << 3);
+  _header = _header | (aux);
+}
+
+Header::Header(const unsigned char &header) {
+  _header = header;
+  //parsea version bits 6-7
+  _version = (header & (3 << 6)) >> 6;
+  //parsea tipo bits 3-5
+  _type = (tPacketType)((header & (7 << 3)) >> 3);
+  //parsea aux bits 0-2
+  _aux = header & 7;
+}

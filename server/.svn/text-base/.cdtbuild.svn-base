@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<?fileVersion 3.1.0?>
+<ManagedProjectBuildInfo>
+  <project id="server.cdt.managedbuild.target.gnu.exe.1182213282" name="Executable (Gnu)" projectType="cdt.managedbuild.target.gnu.exe">
+    <configuration id="cdt.managedbuild.config.gnu.exe.debug.1003370055" name="Debug" description="" parent="cdt.managedbuild.config.gnu.exe.debug" artifactName="server" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" cleanCommand="rm -rf">
+      <toolChain superClass="cdt.managedbuild.toolchain.gnu.exe.debug" id="cdt.managedbuild.toolchain.gnu.exe.debug.991295493" name="GCC Tool Chain">
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.714660044" name="GCC C++ Compiler">
+          <option superClass="gnu.cpp.compiler.option.include.paths" id="gnu.cpp.compiler.option.include.paths.1311157992" valueType="includePath">
+            <listOptionValue value="../../" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.compiler.option.other.other" id="gnu.cpp.compiler.option.other.other.1575290331" value="`pkg-config --cflags libglademm-2.4` `pkg-config --cflags gtkmm-2.4` -c -fmessage-length=0" valueType="string"/>
+          <option superClass="gnu.cpp.compiler.option.warnings.pedantic" id="gnu.cpp.compiler.option.warnings.pedantic.2108807509" value="true" valueType="boolean"/>
+        </tool>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug" id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.321323540" name="GCC C Compiler"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug" id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1837725464" name="GCC C Linker"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug" id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.585818816" name="GCC C++ Linker">
+          <option superClass="gnu.cpp.link.option.libs" id="gnu.cpp.link.option.libs.446658223" valueType="libs">
+            <listOptionValue value="SDL" builtIn="false"/>
+            <listOptionValue value="common" builtIn="false"/>
+            <listOptionValue value="pthread" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.link.option.flags" id="gnu.cpp.link.option.flags.941684966" value="" valueType="string"/>
+          <option superClass="gnu.cpp.link.option.other" id="gnu.cpp.link.option.other.1710769416" valueType="stringList">
+            <listOptionValue value="`pkg-config --libs gtkmm-2.4`" builtIn="false"/>
+            <listOptionValue value="`pkg-config --libs libglademm-2.4`" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.link.option.paths" id="gnu.cpp.link.option.paths.2063653946" valueType="stringList">
+            <listOptionValue value="../../common/Debug" builtIn="false"/>
+          </option>
+        </tool>
+        <tool superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug" id="cdt.managedbuild.tool.gnu.assembler.exe.debug.152960273" name="GCC Assembler"/>
+        <macros/>
+      </toolChain>
+    </configuration>
+    <configuration id="cdt.managedbuild.config.gnu.exe.release.95236723" name="Release" description="" parent="cdt.managedbuild.config.gnu.exe.release" artifactName="server" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" cleanCommand="rm -rf">
+      <toolChain superClass="cdt.managedbuild.toolchain.gnu.exe.release" id="cdt.managedbuild.toolchain.gnu.exe.release.1791421007" name="GCC Tool Chain">
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.505975098" name="GCC C++ Compiler"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release" id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.1249555927" name="GCC C Compiler"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release" id="cdt.managedbuild.tool.gnu.c.linker.exe.release.1304129285" name="GCC C Linker"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release" id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.2092973813" name="GCC C++ Linker"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.assembler.exe.release" id="cdt.managedbuild.tool.gnu.assembler.exe.release.1743542163" name="GCC Assembler"/>
+      </toolChain>
+    </configuration>
+    <macros/>
+  </project>
+</ManagedProjectBuildInfo>

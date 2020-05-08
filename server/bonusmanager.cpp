@@ -1,0 +1,81 @@
+#include "bonusmanager.h"
+#include "lib/timer.h"
+#include "lib/randomgenerator.h"
+
+const int BonusManager::MAX_NUM = 5;
+const int BonusManager::MIN_TIME = 10000;
+const int BonusManager::MAX_TIME = 30000;
+const int BonusManager::EXPIRE_TIME = 5000;
+
+BonusManager::BonusManager() {
+  reset();
+}
+
+void BonusManager::reset() {
+  _mtx.lock();
+  _created = false;
+  _triggered = false;
+  _bonusCounter = 0;
+  _timeToWait = 0;
+  _timeTriggered = 0;
+  _timeCreated = 0;
+  _mtx.unlock();
+}
+
+//devuelve true si deberia aparecer un bonus
+bool BonusManager::createBonus() {
+  bool ret = false;
+  _mtx.lock();
+  //se fija de no pasar el maximo de bonus permitidos
+  if (_bonusCounter < MAX_NUM) {
+    //se fija que no este creado
+    if (!_created) {    
+      if (_triggered) {
+        //hay un bonus pedido antes => se fija si debe aparecer
+        if (Timer::getTime() - _timeTriggered > _timeToWait) {
+          //debe aparecer
+          _created = true;
+          _triggered = false;
+          _timeCreated = Timer::getTime();
+          ret = true;
+        }
+      }
+      else {
+        //no hay un bonus pedido antes => lo pide
+        _triggered = true;
+        _timeToWait = RandomGenerator::getRange(MIN_TIME,MAX_TIME);
+        _timeTriggered = Timer::getTime();
+      }
+    }
+  }
+  _mtx.unlock();
+  return ret;
+}
+
+void BonusManager::eatBonus() {
+  _mtx.lock();
+  _bonusCounter++;
+  _created = false;
+  _mtx.unlock();
+}
+
+int BonusManager::getBonusCounter() {
+  _mtx.lock();
+  int aux(_bonusCounter);
+  _mtx.unlock();
+  return aux;
+}
+
+bool BonusManager::bonusExpired() {
+  bool ret = false;
+  _mtx.lock();
+  if (_created) {
+    //bonus existe => se fija si debe desaparecer por timeout
+    if (Timer::getTime() - _timeCreated > EXPIRE_TIME) {
+      _created = false;
+      ret = true;
+    }
+  }
+  _mtx.unlock();
+  return ret;
+}

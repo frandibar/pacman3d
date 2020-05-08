@@ -1,0 +1,43 @@
+/**
+ * Funciones utiles varias
+ * 
+ * @file helper.h
+ */
+#ifndef __HELPER_H__
+#define __HELPER_H__
+
+#include <string>
+#include <sstream>
+using std::string;
+
+/// toma instancia de cualquier tipo y lo convierte a string
+template <typename T>
+std::string StringConverter(const T &value){
+  std::ostringstream oss;
+  oss << value;
+  return oss.str();
+}
+
+/// convierte de string a T
+template<typename T> 
+T fromString(const string &s){
+  std::istringstream is(s);
+  T r;
+  is >> r;
+  return r;
+}
+
+/// Determina si el contenido del string es numerico o no
+bool stringIsNumeric(const string &s);
+
+/**
+ * fileExists()
+ * Determina si el archivo recibido como parametro existe.
+ * (el parametro debe ser la ruta completa del archivo a validar)
+ */
+bool fileExists( const string & s );
+
+///devuelve true si la cadena source termina con la cadena patron pasada. De lo contrario devuelve false.
+bool endsIn(const string & source, const string & pattern);
+
+#endif 

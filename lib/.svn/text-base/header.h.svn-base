@@ -1,0 +1,48 @@
+#ifndef __HEADER_H__
+#define __HEADER_H__
+#include <string>
+using std::string;
+
+/**Enum para identificar tipo de paquete
+ * 
+ */
+typedef enum tPacketType {INIT = 0,START = 1,STATUS = 2,STOP = 3,QUIT = 4,KEY = 5,MESSAGE = 6,CONNECT = 7};
+
+/**Clase para utilizar el header binario en un paquete
+ * 
+ * */
+class Header {
+	
+  private:
+    unsigned char _header;
+    unsigned char _version;
+    tPacketType _type;
+    unsigned char _aux;
+  
+  public:
+    
+    ///constructor con parametros
+    Header(const unsigned char &version,const tPacketType &type,const unsigned char &aux);
+    
+    ///constructor con un header binario
+    Header(const unsigned char &header);
+    
+    ///constructor sin parametros
+    Header(){};
+    
+    ///devuelve el header bianrio creado
+    unsigned char getBinaryHeader() const {return _header;}
+    
+    ///devuelve tamanio de header
+    static int getHeaderSize() {return sizeof(char);}
+    
+    ///devuelve version de header
+    unsigned char getVersion() const {return _version;}
+    
+    ///devuelve tipo de paquete
+    tPacketType getType() const {return _type;}
+    
+    ///devuelve bits auxiliares
+    unsigned char getAux() const {return _aux;}
+};
+#endif

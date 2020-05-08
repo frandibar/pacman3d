@@ -1,0 +1,195 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ARCO_H_	Arco.h	6;"	d
+Arco	Arco.h	/^	Arco( _Vertice* verticeO, _Vertice* verticeD, TArco* contenido, TArcoID id){$/;"	f	class:Arco
+Arco	Arco.h	/^template < class TVertice, class TArco, class TVerticeID , class TArcoID  > class Arco {$/;"	c
+Edge	edge.cpp	/^Edge::Edge(Vertex* vertice0, Vertex* vertice1, int ID, tEdgeOrientation o){$/;"	f	class:Edge
+Edge	edge.h	/^class Edge {$/;"	c
+EdgeList	edge.h	/^typedef std::vector<Edge*>  EdgeList;$/;"	t
+Element	element.h	/^    Element (const int &vertexId,const tElementType &type,const tOrientation &orientation):_vertexId(vertexId), _type(type), _orientation(orientation){}$/;"	f	class:Element
+Element	element.h	/^class Element {$/;"	c
+ElementList	element.h	/^typedef std::vector<Element> ElementList;$/;"	t
+FREE	graphhandler.h	/^typedef enum tSlot{ FREE = 0, OCCUPIED = 1, PROHIBITED = 2 };$/;"	e	enum:tSlot
+GRAFO_H_	Grafo.h	5;"	d
+GRAPHERRORS_H_	grapherrors.h	2;"	d
+GRAPHHANDLER_H_	graphhandler.h	2;"	d
+Grafo	Grafo.h	/^	Grafo(){$/;"	f	class:Grafo
+Grafo	Grafo.h	/^template < class TVertice, class TArco, class TVerticeID , class TArcoID > class Grafo$/;"	c
+Graph	graph.cpp	/^Graph::Graph(int width, int height){$/;"	f	class:Graph
+Graph	graph.h	/^class Graph {$/;"	c
+GraphErrors	grapherrors.cpp	/^GraphErrors::GraphErrors()$/;"	f	class:GraphErrors
+GraphErrors	grapherrors.h	/^class GraphErrors$/;"	c
+GraphHandler	graphhandler.cpp	/^GraphHandler::GraphHandler(Graph & graph): _graph(graph)$/;"	f	class:GraphHandler
+GraphHandler	graphhandler.h	/^class GraphHandler$/;"	c
+HORIZONTAL_p	graphhandler.h	/^typedef enum tPortalType{VERTICAL_p, HORIZONTAL_p, NONE_p};$/;"	e	enum:tPortalType
+Id	Arco.h	/^	TArcoID		Id;$/;"	m	class:Arco
+Id	Vertice.h	/^	TVerticeID		Id;$/;"	m	class:Vertice
+NONE_p	graphhandler.h	/^typedef enum tPortalType{VERTICAL_p, HORIZONTAL_p, NONE_p};$/;"	e	enum:tPortalType
+OCCUPIED	graphhandler.h	/^typedef enum tSlot{ FREE = 0, OCCUPIED = 1, PROHIBITED = 2 };$/;"	e	enum:tSlot
+PROHIBITED	graphhandler.h	/^typedef enum tSlot{ FREE = 0, OCCUPIED = 1, PROHIBITED = 2 };$/;"	e	enum:tSlot
+VERTICAL_p	graphhandler.h	/^typedef enum tPortalType{VERTICAL_p, HORIZONTAL_p, NONE_p};$/;"	e	enum:tPortalType
+Vertex	vertex.cpp	/^Vertex::Vertex( tVertice * vertex){$/;"	f	class:Vertex
+Vertex	vertex.h	/^class Vertex {$/;"	c
+VertexList	vertex.h	/^typedef std::list< Vertex* >  VertexList;$/;"	t
+Vertice	Vertice.h	/^	Vertice(TVertice* contenido, TVerticeID id){$/;"	f	class:Vertice
+Vertice	Vertice.h	/^template < class TVertice, class TArco, class TVerticeID , class TArcoID > class Vertice {$/;"	c
+_Arco	Grafo.h	/^typedef Arco< TVertice, TArco, TVerticeID , TArcoID > _Arco;$/;"	t	class:Grafo
+_Arco	Vertice.h	/^typedef Arco< TVertice, TArco, TVerticeID , TArcoID > _Arco;$/;"	t	class:Vertice
+_Vertice	Arco.h	/^typedef Vertice < TVertice, TArco, TVerticeID , TArcoID > _Vertice;$/;"	t	class:Arco
+_Vertice	Grafo.h	/^typedef Vertice< TVertice, TArco, TVerticeID , TArcoID > _Vertice;$/;"	t	class:Grafo
+_WrapArco	Grafo.h	/^typedef Wrapper< _Arco > _WrapArco;$/;"	t	class:Grafo
+_WrapArco	Vertice.h	/^typedef Wrapper< _Arco > _WrapArco;$/;"	t	class:Vertice
+_WrapVert	Grafo.h	/^typedef Wrapper< _Vertice > _WrapVert;$/;"	t	class:Grafo
+__ELEMENT_H__	element.h	6;"	d
+__GRAPH_H__	graph.h	3;"	d
+__VERTEX_H__	vertex.h	8;"	d
+_bonus	graphhandler.h	/^	bool _bonus;$/;"	m	class:GraphHandler
+_gHouse	graphhandler.h	/^	bool _gHouse;	$/;"	m	class:GraphHandler
+_graph	graphhandler.h	/^	Graph & _graph;$/;"	m	class:GraphHandler
+_height	graphhandler.h	/^	int _height;$/;"	m	class:GraphHandler
+_orientation	element.h	/^    tOrientation _orientation;$/;"	m	class:Element
+_pStart	graphhandler.h	/^	bool _pStart;$/;"	m	class:GraphHandler
+_pills	graphhandler.h	/^	unsigned int _pills;$/;"	m	class:GraphHandler
+_slots	graphhandler.h	/^	std::vector< std::vector< tSlot > > _slots;$/;"	m	class:GraphHandler
+_state	element.h	/^    tElementState _state;$/;"	m	class:Element
+_type	element.h	/^    tElementType _type;$/;"	m	class:Element
+_vertexId	element.h	/^    int _vertexId;$/;"	m	class:Element
+_width	graphhandler.h	/^	int _width;$/;"	m	class:GraphHandler
+addEdge	graph.cpp	/^bool Graph::addEdge(Vertex* vertex, Vertex* OtherVertex){$/;"	f	class:Graph
+addEdge	graph.cpp	/^bool Graph::addEdge(int edgeID, Vertex* vertex0, Vertex* vertex1){$/;"	f	class:Graph
+addEdgeFinally	graph.cpp	/^void Graph::addEdgeFinally(int edgeID, Vertex* vertex0, Vertex* vertex1, tEdgeOrientation orientation){$/;"	f	class:Graph
+addElement	graphhandler.cpp	/^int GraphHandler::addElement (int row, int column, tCell type){$/;"	f	class:GraphHandler
+addEmptyVertex	graphhandler.cpp	/^int GraphHandler::addEmptyVertex(int i, int j){$/;"	f	class:GraphHandler
+addGhostHouse	graphhandler.cpp	/^int GraphHandler::addGhostHouse(int i, int j, tOrientation orientation){$/;"	f	class:GraphHandler
+addPortal	graphhandler.cpp	/^int GraphHandler::addPortal(int i, int j, tEdgeOrientation orientation){$/;"	f	class:GraphHandler
+addVertex	graph.cpp	/^Vertex* Graph::addVertex(Element* content, int id){$/;"	f	class:Graph
+addVertex	graphhandler.cpp	/^int GraphHandler::addVertex(int i, int j, tElementType type){$/;"	f	class:GraphHandler
+addVerticesAndEdges	graphhandler.cpp	/^void GraphHandler::addVerticesAndEdges(int i, int j, Element* element){$/;"	f	class:GraphHandler
+agregarArco	Grafo.h	/^	void agregarArco( TArco* cont, TArcoID arcoID, _Vertice* verticeOrigen, _Vertice* verticeDestino) {$/;"	f	class:Grafo
+agregarArco	Vertice.h	/^	void agregarArco( _Arco* arco ){$/;"	f	class:Vertice
+agregarVertice	Grafo.h	/^	_Vertice* agregarVertice( TVertice* cont, TVerticeID verticeID){$/;"	f	class:Grafo
+cont	Arco.h	/^	TArco* 		cont; $/;"	m	class:Arco
+cont	Vertice.h	/^	TVertice*		cont;$/;"	m	class:Vertice
+east	graph.h	/^	east,$/;"	e	enum:edge_e
+edgeOrientation	graph.cpp	/^tEdgeOrientation Graph::edgeOrientation(tEdge edge){$/;"	f	class:Graph
+edge_e	graph.h	/^typedef enum edge_e{$/;"	g
+edges	graph.h	/^    EdgeList 	*edges;\/\/aristas en grafo$/;"	m	class:Graph
+edges	vertex.h	/^  	EdgeList	edges;$/;"	m	class:Vertex
+errors	grapherrors.cpp	/^std::string GraphErrors::errors[14] = {"No element can be placed in that position.", "Bonus element already exists.",$/;"	m	class:GraphErrors	file:
+errors	grapherrors.h	/^	static std::string errors[14];$/;"	m	class:GraphErrors
+getActiveEdges	vertex.cpp	/^int Vertex::getActiveEdges() const{$/;"	f	class:Vertex
+getContenido	Arco.h	/^	TArco* getContenido(){$/;"	f	class:Arco
+getContenido	Vertice.h	/^	TVertice* getContenido(){$/;"	f	class:Vertice
+getContent	vertex.h	/^  	inline Element* getContent() const{$/;"	f	class:Vertex
+getEastEdge	vertex.h	/^  	inline Edge* getEastEdge() const{$/;"	f	class:Vertex
+getEdges	graph.cpp	/^EdgeList* Graph::getEdges(){$/;"	f	class:Graph
+getEdges	vertex.h	/^	inline EdgeList getEdges() const{$/;"	f	class:Vertex
+getElementList	graph.cpp	/^ElementList* Graph::getElementList(){$/;"	f	class:Graph
+getErrorText	grapherrors.cpp	/^std::string GraphErrors::getErrorText(int code){$/;"	f	class:GraphErrors
+getGHCoord	graphhandler.cpp	/^std::vector< std::pair<int,int> > GraphHandler::getGHCoord(int i, int j, tOrientation orientation){$/;"	f	class:GraphHandler
+getHeight	graph.h	/^    int getHeight() const {return height;}$/;"	f	class:Graph
+getID	edge.h	/^    inline int getID() const {return id;}$/;"	f	class:Edge
+getID	vertex.h	/^  	inline int getID() const{$/;"	f	class:Vertex
+getId	Arco.h	/^	TArcoID getId(){$/;"	f	class:Arco
+getId	Vertice.h	/^	TVerticeID getId(){$/;"	f	class:Vertice
+getIdVertex	element.h	/^    int getIdVertex() const {return _vertexId;}$/;"	f	class:Element
+getNorthEdge	vertex.h	/^  	inline Edge* getNorthEdge() const{$/;"	f	class:Vertex
+getOrientation	edge.h	/^	inline tEdgeOrientation getOrientation() const{$/;"	f	class:Edge
+getOrientation	element.h	/^    tOrientation getOrientation() const {return _orientation;}$/;"	f	class:Element
+getOther	edge.h	/^	inline Vertex* getOther(Vertex* vertex) const{$/;"	f	class:Edge
+getSource	Grafo.h	/^	_Vertice* getSource() {$/;"	f	class:Grafo
+getSouthEdge	vertex.h	/^  	inline Edge* getSouthEdge() const{$/;"	f	class:Vertex
+getStartingEdgeId	graph.cpp	/^int Graph::getStartingEdgeId(tEdgeOrientation orientation, int vertexID){$/;"	f	class:Graph
+getState	element.h	/^    tElementState getState() const {return _state;}$/;"	f	class:Element
+getType	element.h	/^    tElementType getType() const {return _type;}$/;"	f	class:Element
+getVertex	graph.cpp	/^Vertex* Graph::getVertex(int id){$/;"	f	class:Graph
+getVertex0	edge.h	/^    inline Vertex* getVertex0() const{$/;"	f	class:Edge
+getVertex1	edge.h	/^	inline Vertex* getVertex1() const{$/;"	f	class:Edge
+getVertexID	graphhandler.cpp	/^int GraphHandler::getVertexID(int i, int j){$/;"	f	class:GraphHandler
+getVerticeDestino	Arco.h	/^	_Vertice* getVerticeDestino(){$/;"	f	class:Arco
+getVerticeOrigen	Arco.h	/^	_Vertice* getVerticeOrigen(){$/;"	f	class:Arco
+getVertices	graph.cpp	/^VertexList* Graph::getVertices(){$/;"	f	class:Graph
+getWestEdge	vertex.h	/^  	inline Edge* getWestEdge() const{$/;"	f	class:Vertex
+getWidth	graph.h	/^    int getWidth() const {return width;}$/;"	f	class:Graph
+graph	graph.h	/^    tGrafo		graph;\/\/ estructura de grafo$/;"	m	class:Graph
+hasBonus	graphhandler.h	/^	inline bool hasBonus() const{$/;"	f	class:GraphHandler
+hasGhostHouse	graphhandler.h	/^	inline bool hasGhostHouse() const{$/;"	f	class:GraphHandler
+hasPacmanStart	graphhandler.h	/^	inline bool hasPacmanStart() const{$/;"	f	class:GraphHandler
+height	graph.h	/^    int 		height;\/\/< altura$/;"	m	class:Graph
+id	edge.h	/^    int id;\/\/id de arco$/;"	m	class:Edge
+isConnected	graph.cpp	/^bool Graph::isConnected(){$/;"	f	class:Graph
+isCycleIfConnected	graph.cpp	/^bool Graph::isCycleIfConnected(){$/;"	f	class:Graph
+isEast	graph.cpp	/^bool Graph::isEast(int v1, int v2){$/;"	f	class:Graph
+isNorth	graph.cpp	/^bool Graph::isNorth(int v1, int v2){$/;"	f	class:Graph
+isSouth	graph.cpp	/^bool Graph::isSouth(int v1, int v2){$/;"	f	class:Graph
+isValid	graphhandler.cpp	/^bool GraphHandler::isValid(int i, int j){$/;"	f	class:GraphHandler
+isValidEdge0	graph.cpp	/^tEdge Graph::isValidEdge0(int edge, int vertex0){$/;"	f	class:Graph
+isValidEdge1	graph.cpp	/^tEdge Graph::isValidEdge1(tEdge edgeV0,  int vertex0, int vertex1){$/;"	f	class:Graph
+isWest	graph.cpp	/^bool Graph::isWest(int v1, int v2){$/;"	f	class:Graph
+listWrapArcos	Grafo.h	/^typedef std::list< _WrapArco >  listWrapArcos;$/;"	t	class:Grafo
+listWrapArcos	Vertice.h	/^typedef std::list< _WrapArco >  listWrapArcos;$/;"	t	class:Vertice
+listWrapVertices	Grafo.h	/^typedef std::list < _WrapVert > listWrapVertices;$/;"	t	class:Grafo
+lista	Grafo.h	/^	listWrapVertices 	lista;$/;"	m	class:Grafo
+lista	Vertice.h	/^	listWrapArcos	lista;$/;"	m	class:Vertice
+makesSquare	graphhandler.cpp	/^bool GraphHandler::makesSquare(int i, int j){$/;"	f	class:GraphHandler
+mapVertices	graph.h	/^typedef std::map< tVertice* , Vertex* >		mapVertices;$/;"	t	class:Graph
+none	graph.h	/^	none$/;"	e	enum:edge_e
+north	graph.h	/^	north = 0,	$/;"	e	enum:edge_e
+numberOfPills_PowerUps	graphhandler.h	/^	inline unsigned int numberOfPills_PowerUps() const{$/;"	f	class:GraphHandler
+obtenerArcos	Vertice.h	/^	listWrapArcos obtenerArcos(){$/;"	f	class:Vertice
+obtenerVertice	Grafo.h	/^	_Vertice* obtenerVertice( TVerticeID Id ){$/;"	f	class:Grafo
+obtenerVertices	Grafo.h	/^	listWrapVertices obtenerVertices(){$/;"	f	class:Grafo
+operator <	Vertice.h	/^	bool operator<(const Vertice& other) const{$/;"	f	class:Vertice
+operator ==	Arco.h	/^	bool operator==(const Arco& other) const {$/;"	f	class:Arco
+operator ==	Vertice.h	/^	bool operator==(const Vertice& other) const {$/;"	f	class:Vertice
+orientation	edge.h	/^    tEdgeOrientation orientation;$/;"	m	class:Edge
+portalType	graphhandler.cpp	/^tPortalType GraphHandler::portalType(Vertex * vertex) {$/;"	f	class:GraphHandler
+pushChildren	graph.cpp	/^void Graph::pushChildren( std::stack< tWrappedVertex > & vertStack, tWrappedVertex vertice){$/;"	f	class:Graph
+quitarArco	Vertice.h	/^	void quitarArco( _Arco* arco ){$/;"	f	class:Vertice
+quitarVertice	Grafo.h	/^	bool quitarVertice ( TVerticeID Id ){$/;"	f	class:Grafo
+ratio	element.cpp	/^const unsigned short Element::ratio = 4;$/;"	m	class:Element	file:
+ratio	element.h	/^    static const unsigned short ratio;$/;"	m	class:Element
+removeVertex	graph.cpp	/^bool Graph::removeVertex(int id){$/;"	f	class:Graph
+removeVertex	graphhandler.cpp	/^bool GraphHandler::removeVertex(int i, int j){$/;"	f	class:GraphHandler
+setContenido	Arco.h	/^	void setContenido(TArco* contenidoNuevo){$/;"	f	class:Arco
+setContenido	Vertice.h	/^	void setContenido(TVertice* contenidoNuevo){$/;"	f	class:Vertice
+setContent	vertex.h	/^  	inline void setContent( Element* content){$/;"	f	class:Vertex
+setEastEdge	vertex.h	/^  	inline void setEastEdge( Edge* edge){$/;"	f	class:Vertex
+setId	Arco.h	/^	void setId(TArcoID id){$/;"	f	class:Arco
+setId	Vertice.h	/^	void setId(TVerticeID id){$/;"	f	class:Vertice
+setNorthEdge	vertex.h	/^  	inline void setNorthEdge( Edge* edge){$/;"	f	class:Vertex
+setSource	Grafo.h	/^	_Vertice* setSource( TVerticeID Id ){$/;"	f	class:Grafo
+setSouthEdge	vertex.h	/^  	inline void setSouthEdge( Edge* edge){$/;"	f	class:Vertex
+setState	element.h	/^    void setState(const tElementState &state) {_state = state;}$/;"	f	class:Element
+setVerticeDestino	Arco.h	/^	void setVerticeDestino(_Vertice* vertice){$/;"	f	class:Arco
+setVerticeOrigen	Arco.h	/^	void setVerticeOrigen(_Vertice* vertice){$/;"	f	class:Arco
+setWestEdge	vertex.h	/^  	inline void setWestEdge( Edge* edge){$/;"	f	class:Vertex
+source	Grafo.h	/^	_Vertice*			source;$/;"	m	class:Grafo
+south	graph.h	/^	south,$/;"	e	enum:edge_e
+tEdge	graph.h	/^}tEdge;$/;"	t	typeref:enum:edge_e
+tGrafo	graph.h	/^typedef Grafo < Element, void, int, int > 	tGrafo;$/;"	t	class:Graph
+tPortalType	graphhandler.h	/^typedef enum tPortalType{VERTICAL_p, HORIZONTAL_p, NONE_p};$/;"	g
+tSlot	graphhandler.h	/^typedef enum tSlot{ FREE = 0, OCCUPIED = 1, PROHIBITED = 2 };$/;"	g
+tVertice	graph.h	/^typedef Vertex::tVertice					tVertice;$/;"	t	class:Graph
+tVertice	vertex.h	/^	typedef Vertice< Element, void, int, int > tVertice;$/;"	t	class:Vertex
+tWrappedVertex	graph.h	/^typedef tGrafo::_WrapVert					tWrappedVertex;$/;"	t	class:Graph
+validVertex	graph.cpp	/^bool Graph::validVertex(int id){$/;"	f	class:Graph
+validateClosedGraph	graphhandler.cpp	/^int GraphHandler::validateClosedGraph() {$/;"	f	class:GraphHandler
+vertex0	edge.h	/^    Vertex* vertex0;$/;"	m	class:Edge
+vertex1	edge.h	/^    Vertex* vertex1;$/;"	m	class:Edge
+vertice	vertex.h	/^  	tVertice*	vertice;$/;"	m	class:Vertex
+verticeDestino	Arco.h	/^	_Vertice* 	verticeDestino;$/;"	m	class:Arco
+verticeOrigen	Arco.h	/^	_Vertice* 	verticeOrigen;$/;"	m	class:Arco
+vertices	graph.h	/^    mapVertices	vertices;\/\/ vertices del grafo$/;"	m	class:Graph
+west	graph.h	/^	west,$/;"	e	enum:edge_e
+width	graph.h	/^    int 		width; \/\/< ancho$/;"	m	class:Graph
+~Arco	Arco.h	/^	virtual ~Arco(){$/;"	f	class:Arco
+~Grafo	Grafo.h	/^	virtual ~Grafo(){$/;"	f	class:Grafo
+~Graph	graph.cpp	/^Graph::~Graph(){$/;"	f	class:Graph
+~GraphErrors	grapherrors.cpp	/^GraphErrors::~GraphErrors()$/;"	f	class:GraphErrors
+~GraphHandler	graphhandler.cpp	/^GraphHandler::~GraphHandler() {$/;"	f	class:GraphHandler
+~Vertice	Vertice.h	/^	virtual ~Vertice(){$/;"	f	class:Vertice

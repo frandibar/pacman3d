@@ -1,0 +1,58 @@
+/**
+ * @file clientmanager.h
+ */
+#ifndef __CLIENT_MANAGER_H__
+#define __CLIENT_MANAGER_H__
+#include "lib/mutex.h"
+#include "threadtransmitter.h"
+#include "threadreceiver.h"
+#include "threaddistribution.h"
+#include <map>
+#include <vector>
+using std::vector;
+using std::map;
+
+///mapa de clientes siendo atendidos
+typedef map<int,ThreadTransmitter*> TransmitterMap;
+
+class ThreadReceiver;
+///mapa de detectores de input
+typedef map<int,ThreadReceiver*> ReceiverMap;
+
+///lista de IDs de clientes
+typedef vector<int> IdList;
+
+/**
+ * Clase para administrar los threads de atencion al cliente
+ * Permite dar de alta y baja a clientes y centralizar el acceso a los hilos ThreadTransmitter y ThreadReceiver
+ * Metodos protegido por mutex
+ */
+class ClientManager {
+  private:
+    Mutex _mtx;
+    TransmitterMap _transmitters;
+    ReceiverMap _receivers;
+    int _number;
+    ThreadDistribution &_thDistrib;
+  public:
+  
+  	/// constructor
+    ClientManager(ThreadDistribution &thDistrib);
+    
+    /// devuelve la cantidad de clientes que se conectaron en el juego
+    int getNumberClients();
+    
+    /// agrega un cliente nuevo
+    void addClient(int playerId,ThreadTransmitter *thTransmitter,ThreadReceiver *thReceiver);
+    
+    /// elimina clientes
+    void deleteClients();
+    
+    ///filtra jugadores en buen estado
+    IdList checkPlayersStatus(bool &pacmanDisconnected);
+    
+    ///obtiene el mapa de hilos transmisores (DEBE HACERSE DELETE)
+    TransmitterMap* getRequests();
+};
+
+#endif /* __CLIENT_MANAGER_H__ */

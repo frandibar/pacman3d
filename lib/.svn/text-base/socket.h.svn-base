@@ -1,0 +1,70 @@
+#ifndef __SOCKET_H__
+#define __SOCKET_H__
+#include <string>
+#include <netdb.h>
+using std::string;
+
+/**typedef para el numero de puerto
+ */
+typedef unsigned short port_type;
+/**enum para el select
+ */
+typedef enum AccessType {READ,WRITE};
+
+/**Clase para utilizar sockets
+ * 
+ */
+class Socket {
+	
+  private:
+    static const int RCV_TRIES;
+    typedef enum tState {OK,ERROR};
+    int _sockfd;
+    sockaddr_in _address;
+    tState _state;
+    // constructor de copia y operator= ocultos
+    Socket(const Socket&);
+    Socket& operator=(const Socket&);
+    
+    // crea un socket a partir del file descriptor
+    Socket(const int &fd);
+    
+  public:
+  
+    /// construye un socket para cliente
+    Socket(const string & host, const port_type & port);
+    
+    /// constructor de socket para server
+    explicit Socket(const string & host, const port_type &port,const int &cant_clientes);
+    
+    ///destructor
+    virtual ~Socket();
+    
+    ///envia un buffer
+    int send(unsigned char *buf,const int &len);
+    
+    ///recive un buffer
+    int rcv(unsigned char *buf,const int &len);
+    
+    ///acepta un nuevo cliente
+    Socket* accept();
+    
+    ///devuelve si esta en buen estado
+    operator bool () const;
+    
+    ///connecta el cliente con el server
+    void connect();
+    
+    ///cierra el socket
+    void close();
+    
+    /// se fija si hay datos q leer/escribir
+    bool select(const bool &read,const int &mseg);
+    
+    /// devuelve host del cliente
+    string getPeerName();
+    
+    /// devuelve host local
+    string getSocketName();
+};
+#endif /* __SOCKET_H__ */

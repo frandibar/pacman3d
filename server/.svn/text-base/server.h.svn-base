@@ -1,0 +1,53 @@
+#ifndef __SERVER_H__
+#define __SERVER_H__
+#include "server/configscreen.h"
+#include "server/threaddispatcher.h"
+#include "server/threaddistribution.h"
+#include "server/threadgame.h"
+#include "common/helper.h"
+#include <iostream>
+#include <string>
+using std::string;
+using std::cout;
+using std::endl;
+
+/**
+ * Clase que representa la ejecucion del SERVER.
+ * Al ponerlo a correr (run) dispara el servicio de atencion
+ */
+class Server {
+  private:
+    static const int END;
+    static const int ERROR_PARAM;
+    static const int ERROR_THREAD;
+    static const int ERROR_XML;
+    static const int MAX_CLIENTS;
+    static const int MAX_PLAYERS;
+    static const int PROTOCOL_VERSION;
+    static const int WAITKBD;
+    static const char SALIDA;
+    static const string STR_SERVER_ABORT;
+    static const string STR_XML_ERROR;
+    static const string STR_XML_WORLD_NO_LEVELS;
+    static const string STR_CONFIG_ERROR;
+    static const string STR_SERVER_ERROR;
+    static const string STR_CONNECT_ERROR;
+    static const string STR_SERVER_INIT;
+
+    int _argc;
+    char **_argv;
+    tGameConfig _gameConfig;
+
+    //se fija si se presiono una tecla en STDIN
+    bool kbhit();
+    void loadConfig(const tConfig &config);
+    int startService(const tConfig &config);
+    
+  public:
+  	/// constructor
+    Server(int argc, char **argv): _argc(argc), _argv(argv){};
+    /// ejecuta el server y habilita el servicio de juegos
+    int run();
+};
+
+#endif /*__SERVER_H__*/

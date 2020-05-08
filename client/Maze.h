@@ -1,0 +1,79 @@
+#ifndef MAZE_H_INCLUDED
+#define MAZE_H_INCLUDED
+
+#include "MappedObject.h"
+#include "Player.h"
+#include "Pill.h"
+#include "lib/utilities.h"
+#include "lib/element.h"
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <SDL/SDL.h>
+#include <vector>
+#include <list>
+
+const int MAX_EXT = 48;      // maximum maze size for each dimension
+const int NTEXTURES = 3;     // number of textures
+
+// meyers singleton class
+class Maze
+{
+public:
+    enum tTextures { NONE = -1, FLOOR, WALL, PORTAL, ROOF };
+
+    static Maze& instance() {
+        static Maze singleton;
+        return singleton;
+    }
+
+    void init();
+    void draw(int width, int height, unsigned int playerId, bool upperView = false);
+    void load(unsigned int width, unsigned int height, const EdgeSet& edges);
+    bool addStep(unsigned int playerId, float factor);
+
+    SDL_Surface* getSurface() const { return _pSurface; }
+    void setSurface(SDL_Surface* pSurface) { _pSurface = pSurface; }
+
+    GLuint getTextureId(unsigned int idx) { return _vTextureIds[idx]; } 
+    unsigned int getWidth() const { return _width; }
+    unsigned int getHeight() const { return _height; }
+
+    Player* getPlayer(unsigned int playerId);
+
+    bool addPlayer(int id, Player::tRole role);
+    void setPlayerPosition(Player* player, unsigned int edge, unsigned int pos, unsigned int direction);
+
+    void addElement(tElementType type, unsigned int vertexId, tOrientation orientation);
+    bool updateElementState(tElementType type, unsigned int vertexId, tElementState state);
+
+private:
+    static int wall[3][MAX_EXT][MAX_EXT][MAX_EXT];  // stores texture index associated to wall
+
+    Maze();                         // hidden constructor
+    ~Maze();                        // hidden destructor
+    Maze(const Maze&);              // hidden copy constructor
+    Maze& operator=(Maze const&);   // hidden assignment operator
+
+    void fillgrid(const EdgeSet& edges);
+    void addVerticalPortal(int col);
+    void addHorizontalPortal(int row);
+
+    void convertTextures();
+    bool validStep(MappedObject* obj);
+
+    // member variables
+    SDL_Surface* _pSurface;
+    GLuint _vTextureIds[NTEXTURES];
+    std::vector<SDL_Surface*> _vpTextureSurfaces; 
+    std::vector<std::vector<bool> > _grid;
+    unsigned int _width;
+    unsigned int _height;
+
+    std::list<Player*> _players;
+    std::list<Pill*> _pills;
+    std::list<PowerUp*> _powerups;
+    std::list<Bonus*> _bonuses;
+};
+
+#endif

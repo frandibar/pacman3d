@@ -1,0 +1,35 @@
+//funciones de ayuda comun
+#include "common/helper.h"
+#include <sys/stat.h> // Para fileExists()
+
+bool stringIsNumeric(const string &s) 
+{
+    if (s.compare("") == 0)
+        return false;
+    for (unsigned int i= 0;i<s.length();i++)
+        if (((s[i] - '0') < 0) || ((s[i] - '0') > 9))
+            return false;
+    return true;
+}
+
+bool fileExists( const string & filename ) 
+{
+    struct stat buffer ;
+    if ( stat( filename.c_str(), &buffer ) == 0 ) return true;
+    return false;
+}
+
+bool endsIn(const string & source, const string & pattern)
+{
+    unsigned int srcLast = source.size() - 1;
+    unsigned int patLast = pattern.size() - 1;
+
+    if ( srcLast < patLast )// si lo que quiero buscar es mas largo que lo que tengo, no matchean
+        return false;
+
+    for ( unsigned int i = 0; i <= patLast ; ++i){
+        if ( source[srcLast - i] != pattern[patLast - i] )
+            return false;
+    }
+    return true;
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--PacMan3D Map-->
+<map height="24" width="24">
+    <vertices>
+        <vertex id="122">
+            <element type="bonus" />
+        </vertex>
+        <vertex id="123">
+            <element type="pill" />
+        </vertex>
+        <vertex id="124">
+            <element type="pill" />
+        </vertex>
+        <vertex id="125">
+            <element type="pacmanstart" orientation="N" />
+        </vertex>
+        <vertex id="126">
+            <element type="none" />
+        </vertex>
+        <vertex id="127">
+            <element type="none" />
+        </vertex>
+        <vertex id="128">
+            <element type="pill" />
+        </vertex>
+        <vertex id="129">
+            <element type="powerup" />
+        </vertex>
+        <vertex id="130">
+            <element type="pill" />
+        </vertex>
+        <vertex id="131">
+            <element type="none" />
+        </vertex>
+        <vertex id="132">
+            <element type="none" />
+        </vertex>
+        <vertex id="133">
+            <element type="none" />
+        </vertex>
+        <vertex id="134">
+            <element type="ghosthouse" orientation="W" />
+        </vertex>
+        <vertex id="146">
+            <element type="none" />
+        </vertex>
+        <vertex id="148">
+            <element type="none" />
+        </vertex>
+        <vertex id="170">
+            <element type="none" />
+        </vertex>
+        <vertex id="171">
+            <element type="none" />
+        </vertex>
+        <vertex id="172">
+            <element type="none" />
+        </vertex>
+    </vertices>
+    <edges>
+        <edge id="266" vertexFrom="122" vertexTo="123" />
+        <edge id="267" vertexFrom="123" vertexTo="124" />
+        <edge id="268" vertexFrom="124" vertexTo="125" />
+        <edge id="269" vertexFrom="125" vertexTo="126" />
+        <edge id="270" vertexFrom="126" vertexTo="127" />
+        <edge id="271" vertexFrom="127" vertexTo="128" />
+        <edge id="272" vertexFrom="128" vertexTo="129" />
+        <edge id="273" vertexFrom="129" vertexTo="130" />
+        <edge id="274" vertexFrom="130" vertexTo="131" />
+        <edge id="275" vertexFrom="131" vertexTo="132" />
+        <edge id="276" vertexFrom="132" vertexTo="133" />
+        <edge id="277" vertexFrom="133" vertexTo="134" />
+        <edge id="290" vertexFrom="146" vertexTo="122" />
+        <edge id="292" vertexFrom="148" vertexTo="124" />
+        <edge id="338" vertexFrom="170" vertexTo="146" />
+        <edge id="340" vertexFrom="172" vertexTo="148" />
+        <edge id="362" vertexFrom="170" vertexTo="171" />
+        <edge id="363" vertexFrom="171" vertexTo="172" />
+    </edges>
+</map>

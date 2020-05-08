@@ -1,0 +1,10 @@
+src_files = Split("""
+    edge.cpp
+    element.cpp
+    graph.cpp
+    grapherrors.cpp
+    graphhandler.cpp
+    vertex.cpp
+""")
+
+SharedLibrary('graph', src_files)

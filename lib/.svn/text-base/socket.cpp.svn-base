@@ -1,0 +1,185 @@
+#include "common/socket.h"
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+
+const int Socket::RCV_TRIES = 50;
+
+//crea un socket a partir del file descriptor
+Socket::Socket(const int &fd){
+  _state = OK;
+  int Tam_Direccion = sizeof(struct sockaddr_in);
+  _sockfd = ::accept(fd,(sockaddr*)&_address,(socklen_t*)&Tam_Direccion);
+  if (_sockfd == -1)
+    _state = ERROR;
+}
+
+//contruye un socket para cliente
+Socket::Socket(const string& host,const port_type &port) {
+	
+  _state = OK;
+  
+	// Informacion de la maquina destino x DNS
+	struct hostent * hostInfo = gethostbyname (host.c_str());
+	if(hostInfo == 0) {
+		_state = ERROR;
+		return;
+	}
+  
+  _sockfd = socket(AF_INET,SOCK_STREAM,0);
+  if (_sockfd == -1)
+    _state = ERROR;
+  else {
+    _address.sin_family = AF_INET; // Host byte order
+    _address.sin_port = htons(port); // Network byte order
+    // _address.sin_addr.s_addr = inet_addr(host.c_str());
+    _address.sin_addr = *((struct in_addr *) hostInfo->h_addr); // Ya esta en Network byte order
+    memset(&(_address.sin_zero),'\0', sizeof(_address.sin_zero)); // ZERO-PADDING
+    /*int zero = 40;
+    setsockopt (_sockfd, IPPROTO_TCP, TCP_SYNCNT, &zero, sizeof (zero));*/
+  }
+}
+
+//constructor de socket para server
+Socket::Socket(const string & host, const port_type & port, const int & cant_clientes) {
+  _state = OK;
+  
+	// Informacion de la maquina destino x DNS
+	struct hostent * hostInfo = gethostbyname (host.c_str());
+	if(hostInfo == 0) {
+		_state = ERROR;
+		return;
+	}
+  
+  if ((_sockfd = socket(AF_INET,SOCK_STREAM,0)) < 0)
+    _state = ERROR;
+  else {
+    int yes = 1;
+    //reutilizar el puerto
+    if (setsockopt(_sockfd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int)) < 0)
+      _state = ERROR;
+    else {
+      memset(&(_address.sin_zero),'\0', sizeof(_address.sin_zero)); // ZERO-PADDING
+      _address.sin_family = AF_INET; // Host byte order
+      _address.sin_port = htons(port); // Network byte order
+      // _address.sin_addr.s_addr = htonl(INADDR_ANY); // use my IP address (Network byte order!)
+      _address.sin_addr = *((struct in_addr *) hostInfo->h_addr); // Ya esta en Network byte order
+      //binding y escucha
+      if(bind(_sockfd,(sockaddr*)&_address,(socklen_t)sizeof(sockaddr)) < 0 )
+        _state = ERROR;
+      else if (listen(_sockfd,cant_clientes) < 0)
+        _state = ERROR;;
+    }
+  }
+}
+
+Socket::~Socket(){
+  ::close(_sockfd);
+}
+
+//cierra socket
+void Socket::close(){
+  ::close(_sockfd);
+  _state = ERROR;
+}
+
+//acepta una nueva conexion
+Socket* Socket::accept(){
+  Socket* newsock = new Socket(_sockfd);
+  if ((*newsock) && (*this))
+    return newsock;
+  _state = ERROR;
+  delete newsock;
+  return 0;
+}
+
+//operator bool
+Socket::operator bool () const{
+  return (_state == OK);
+}
+
+void Socket::connect(){
+  if (::connect(_sockfd,(sockaddr*)&_address,sizeof(sockaddr)) == -1)
+    _state = ERROR;
+}
+
+int Socket::send(unsigned char *buf,const int &len){
+  int counter = 0;
+  int bytes = 0;
+  //envia string
+  while (counter < len) {
+    if ((bytes = ::send(_sockfd,buf+counter,len - counter,MSG_NOSIGNAL)) < 0) {
+      _state = ERROR;
+      return -1;
+    }
+    else 
+      counter += bytes;
+  }
+  return counter;
+}
+
+int Socket::rcv(unsigned char *buf,const int &len){
+  int counter = 0;
+  int bytes = 0;
+  while (counter < len) {
+    for (int i = 0; i < RCV_TRIES; ++i) {
+      bytes = recv(_sockfd,buf+counter,len - counter,0);
+      if (bytes < 0) {
+        _state = ERROR;
+        return -1;
+      }
+      else if (bytes > 0)
+        break;
+    }
+    if (bytes <= 0) {
+      _state = ERROR;
+      return -1;
+    }
+    counter += bytes;
+  }
+  return counter;
+}
+
+//devuelve host del cliente
+string Socket::getPeerName() {
+  sockaddr_in addr;
+  unsigned int addr_len = sizeof(addr);
+  getpeername(_sockfd,(sockaddr*)&addr,(socklen_t*)&addr_len);
+  return inet_ntoa(addr.sin_addr);
+}
+
+//devuelve host local
+string Socket::getSocketName(){
+  sockaddr_in addr;
+  unsigned int addr_len = sizeof(addr);
+  getsockname(_sockfd,(sockaddr*)&addr,(socklen_t*)&addr_len);
+  return inet_ntoa(addr.sin_addr);
+}
+
+//se fija si hay datos q leer/escribir
+bool Socket::select(const bool &read,const int &mseg) {  
+  //se fija el timeout
+  struct timeval tiempo;
+  tiempo.tv_sec = mseg/1000;
+  tiempo.tv_usec = (mseg%1000)*1000;
+  //inicializacion de estructuras
+  fd_set selector;
+  FD_ZERO(&selector);
+  FD_SET(_sockfd,&selector);
+  //se fija si hay algo para leer o algo enviado
+  if (read) {
+    if (::select(_sockfd+1,&selector,0,0,&tiempo) < 0) {
+      _state = ERROR;
+      return false;
+    }
+    return (FD_ISSET(_sockfd,&selector));
+  }
+  else {//escritura
+    if (::select(_sockfd+1,0,&selector,0,&tiempo) < 0){
+      _state = ERROR;
+      return false;
+    }
+    return (FD_ISSET(_sockfd,&selector));
+  }
+}

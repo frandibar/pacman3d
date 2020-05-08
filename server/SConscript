@@ -1,0 +1,13 @@
+Import('env')
+
+newEnv = env.Clone()
+
+libs = ['cppunit']
+libpath = 'lib'
+target = 'server'
+
+src_files = Split("""
+    main.cpp
+""")
+
+newEnv.Program(target, src_files, LIBS=libs, LIBPATH=libpath)

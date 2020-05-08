@@ -1,0 +1,15 @@
+Import('env')
+
+newEnv = env.Clone()
+
+target = 'editor'
+
+src_files = Split("""
+    editorscreen.cpp
+    main.cpp
+    mapcell.cpp
+    tablemanager.cpp
+""")
+
+newEnv.SharedLibrary(target, src_files)
+

@@ -1,0 +1,22 @@
+#ifndef __RANDOMGENERATOR_H__
+#define __RANDOMGENERATOR_H__
+
+/**
+ * Generador de numeros aleatorios
+ * Clase Service (no se instancia. Todos sus metodos son de clase)
+ */
+class RandomGenerator {
+  private:
+    static const int RANDOM_MAX;
+    RandomGenerator();
+  public:
+    /// entre 0 y RANDOM_MAX = 32767
+    static int get();
+    
+    /// flotante entre 0 y 1
+    static double getf();
+    
+    /// entre rango
+    static int getRange(int min, int max);
+};
+#endif

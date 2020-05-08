@@ -1,0 +1,22 @@
+#ifndef __LOG_H__
+#define __LOG_H__
+#include "lib/mutex.h"
+#include <string>
+using std::string;
+
+/**
+ * Clase para loguear los eventos principales del server
+ */
+class Log {
+  private:
+    string _path;
+    Mutex _mtx;
+    
+  public:
+    ///constructor con parametros, si path = "" vuelca en stdout
+    Log(const string &path);
+    /// registra el mensaje recibido en el log
+    void logMsg(const string &msg);
+};
+
+#endif /* __LOG_H__ */

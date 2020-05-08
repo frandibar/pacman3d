@@ -1,0 +1,58 @@
+#ifndef PLAYER_H_INCLUDED
+#define PLAYER_H_INCLUDED
+
+#include "MappedObject.h"
+#include "common/utilities.h"
+
+#include <string>
+#include <GL/gl.h>
+
+class Player : public MappedObject
+{
+public:
+    enum tRole { PACMAN, GHOST };
+    static const double RADIUS;
+
+    Player(unsigned int id, tRole role);       // constructor
+    ~Player() {};
+
+    void init();
+    void draw(bool asDot);    // asDot to draw as a dot
+    void draw() { draw(false); }
+
+    void turnLeft(float angle)  { rotate(OB_Y, angle); }
+    void turnRight(float angle) { rotate(OB_Y, -angle); }
+
+    int getScore() const { return _score; }
+    void setScore(int score) { _score = score; }
+
+    std::string getName() const { return _name; }
+    void setName(const std::string& name) { _name = name; }
+
+    GLuint getIcon() const { return _glIcon; }
+    unsigned int getId() const { return _id; }
+
+    void setIsAlive(bool isAlive) { _isAlive = isAlive; }
+    bool getIsAlive() const { return _isAlive; }
+
+    void setPowerUpEnabled(bool enabled) { _powerupEnabled = enabled; }
+    bool getPowerUpEnabled() const { return _powerupEnabled; }
+
+    void setOrientation(tOrientation orientation);
+    bool getOrientation() const { return _orientation; }
+
+private:
+    unsigned int _id;
+    tRole _role;
+    int _score;
+    std::string _name;
+    GLuint _glTextureNormal;    // player texture id in normal state
+    GLuint _glTexturePowerUp;   // player texture id when pacman on powerup
+    GLuint _glTextureEaten;     // player texture id when eaten
+    GLuint _glIcon;             // icon texture id
+    bool _isAlive;
+    bool _powerupEnabled;
+    tOrientation _orientation;
+};
+
+#endif

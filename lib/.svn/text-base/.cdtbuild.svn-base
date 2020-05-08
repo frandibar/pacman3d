@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?fileVersion 3.1.0?>
+<ManagedProjectBuildInfo>
+  <project id="common.cdt.managedbuild.target.gnu.lib.1734954979" name="Static Library (Gnu)" projectType="cdt.managedbuild.target.gnu.lib">
+    <configuration id="cdt.managedbuild.config.gnu.lib.debug.1789082908" name="Debug" description="" parent="cdt.managedbuild.config.gnu.lib.debug" artifactName="common" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" artifactExtension="a" cleanCommand="rm -rf">
+      <toolChain superClass="cdt.managedbuild.toolchain.gnu.lib.debug" id="cdt.managedbuild.toolchain.gnu.lib.debug.556940431" name="GCC Tool Chain">
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.lib.debug" id="cdt.managedbuild.tool.gnu.cpp.compiler.lib.debug.1767968871" name="GCC C++ Compiler">
+          <option superClass="gnu.cpp.compiler.option.include.paths" id="gnu.cpp.compiler.option.include.paths.388295655" valueType="includePath">
+            <listOptionValue value="../../" builtIn="false"/>
+            <listOptionValue value="../" builtIn="false"/>
+          </option>
+          <option superClass="gnu.cpp.compiler.option.other.other" id="gnu.cpp.compiler.option.other.other.151828980" value="`pkg-config --cflags libglademm-2.4` `pkg-config --cflags gtkmm-2.4` -c -fmessage-length=0" valueType="string"/>
+          <option superClass="gnu.cpp.compiler.option.warnings.pedantic" id="gnu.cpp.compiler.option.warnings.pedantic.874200386" value="true" valueType="boolean"/>
+        </tool>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.debug" id="cdt.managedbuild.tool.gnu.c.compiler.lib.debug.1675147513" name="GCC C Compiler"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.archiver.lib.debug" id="cdt.managedbuild.tool.gnu.archiver.lib.debug.583974367" name="GCC Archiver"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.assembler.lib.debug" id="cdt.managedbuild.tool.gnu.assembler.lib.debug.729021373" name="GCC Assembler"/>
+        <macros/>
+      </toolChain>
+    </configuration>
+    <configuration id="cdt.managedbuild.config.gnu.lib.release.214479728" name="Release" description="" parent="cdt.managedbuild.config.gnu.lib.release" artifactName="common" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" artifactExtension="a" cleanCommand="rm -rf">
+      <toolChain superClass="cdt.managedbuild.toolchain.gnu.lib.release" id="cdt.managedbuild.toolchain.gnu.lib.release.121524190" name="GCC Tool Chain">
+        <tool superClass="cdt.managedbuild.tool.gnu.cpp.compiler.lib.release" id="cdt.managedbuild.tool.gnu.cpp.compiler.lib.release.1690750585" name="GCC C++ Compiler">
+          <option superClass="gnu.cpp.compiler.option.warnings.pedantic" id="gnu.cpp.compiler.option.warnings.pedantic.908431541" value="true" valueType="boolean"/>
+          <option superClass="gnu.cpp.compiler.option.other.other" id="gnu.cpp.compiler.option.other.other.1605865305" value="`pkg-config --cflags libglademm-2.4` `pkg-config --cflags gtkmm-2.4` -c -fmessage-length=0" valueType="string"/>
+          <option superClass="gnu.cpp.compiler.option.include.paths" id="gnu.cpp.compiler.option.include.paths.383162715" valueType="includePath">
+            <listOptionValue value="../../" builtIn="false"/>
+            <listOptionValue value="../" builtIn="false"/>
+          </option>
+        </tool>
+        <tool superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.release" id="cdt.managedbuild.tool.gnu.c.compiler.lib.release.504162422" name="GCC C Compiler"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.archiver.lib.release" id="cdt.managedbuild.tool.gnu.archiver.lib.release.1218204480" name="GCC Archiver"/>
+        <tool superClass="cdt.managedbuild.tool.gnu.assembler.lib.release" id="cdt.managedbuild.tool.gnu.assembler.lib.release.1677801283" name="GCC Assembler"/>
+        <macros/>
+      </toolChain>
+    </configuration>
+  </project>
+</ManagedProjectBuildInfo>

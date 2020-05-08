@@ -1,0 +1,81 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AccessType	socket.h	/^typedef enum AccessType {READ,WRITE};$/;"	g
+CONNECT	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	e	enum:tPacketType
+ERROR	socket.h	/^    typedef enum tState {OK,ERROR};$/;"	e	enum:Socket::tState
+INIT	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	e	enum:tPacketType
+KEY	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	e	enum:tPacketType
+MESSAGE	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	e	enum:tPacketType
+OK	socket.h	/^    typedef enum tState {OK,ERROR};$/;"	e	enum:Socket::tState
+Packet	packet.cpp	/^Packet::Packet(const Packet &packet): _header(packet._header), _bodylen(packet._bodylen) {$/;"	f	class:Packet
+Packet	packet.cpp	/^Packet::Packet(const unsigned char &version,const tPacketType &type,const unsigned char &aux,unsigned char *body,int bodylen): _header(version,type,aux), _bodylen(bodylen) {$/;"	f	class:Packet
+Packet	packet.h	/^    Packet():_body(0){};$/;"	f	class:Packet
+Packet	packet.h	/^class Packet $/;"	c
+PacketHeader	packetheader.cpp	/^PacketHeader::PacketHeader(const unsigned char &header) $/;"	f	class:PacketHeader
+PacketHeader	packetheader.cpp	/^PacketHeader::PacketHeader(const unsigned char &version, const tPacketType &type, const unsigned char &aux) $/;"	f	class:PacketHeader
+PacketHeader	packetheader.h	/^    PacketHeader()$/;"	f	class:PacketHeader
+PacketHeader	packetheader.h	/^class PacketHeader $/;"	c
+QUIT	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	e	enum:tPacketType
+RCV_TRIES	socket.cpp	/^const int Socket::RCV_TRIES = 50;$/;"	m	class:Socket	file:
+RCV_TRIES	socket.h	/^    static const int RCV_TRIES;$/;"	m	class:Socket
+READ	socket.h	/^typedef enum AccessType {READ,WRITE};$/;"	e	enum:AccessType
+START	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	e	enum:tPacketType
+STATUS	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	e	enum:tPacketType
+STOP	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	e	enum:tPacketType
+Socket	socket.cpp	/^Socket::Socket(const int &fd){$/;"	f	class:Socket
+Socket	socket.cpp	/^Socket::Socket(const string & host, const port_type & port, const int & cant_clientes) {$/;"	f	class:Socket
+Socket	socket.cpp	/^Socket::Socket(const string& host,const port_type &port) {$/;"	f	class:Socket
+Socket	socket.h	/^class Socket {$/;"	c
+SocketProtocol	socketprotocol.h	/^    SocketProtocol(const string& host, const port_type &port) : Socket(host, port)$/;"	f	class:SocketProtocol
+SocketProtocol	socketprotocol.h	/^    explicit SocketProtocol(const string & host, const port_type & port, const int & cant_clientes) : Socket(host, port, cant_clientes)$/;"	f	class:SocketProtocol
+SocketProtocol	socketprotocol.h	/^class SocketProtocol : private Socket $/;"	c
+WRITE	socket.h	/^typedef enum AccessType {READ,WRITE};$/;"	e	enum:AccessType
+__SOCKET_H__	socket.h	2;"	d
+_address	socket.h	/^    sockaddr_in _address;$/;"	m	class:Socket
+_aux	packetheader.h	/^    unsigned char _aux;$/;"	m	class:PacketHeader
+_body	packet.h	/^    unsigned char* _body;$/;"	m	class:Packet
+_bodylen	packet.h	/^    int _bodylen;$/;"	m	class:Packet
+_header	packet.h	/^    Header _header;$/;"	m	class:Packet
+_header	packetheader.h	/^    unsigned char _header;$/;"	m	class:PacketHeader
+_sockfd	socket.h	/^    int _sockfd;$/;"	m	class:Socket
+_state	socket.h	/^    tState _state;$/;"	m	class:Socket
+_type	packetheader.h	/^    tPacketType _type;$/;"	m	class:PacketHeader
+_version	packetheader.h	/^    unsigned char _version;$/;"	m	class:PacketHeader
+accept	socket.cpp	/^Socket* Socket::accept(){$/;"	f	class:Socket
+accept	socketprotocol.cpp	/^SocketProtocol* SocketProtocol::accept()$/;"	f	class:SocketProtocol
+close	socket.cpp	/^void Socket::close(){$/;"	f	class:Socket
+close	socketprotocol.cpp	/^void SocketProtocol::close()$/;"	f	class:SocketProtocol
+connect	socket.cpp	/^void Socket::connect(){$/;"	f	class:Socket
+connect	socketprotocol.cpp	/^void SocketProtocol::connect()$/;"	f	class:SocketProtocol
+getAux	packetheader.h	/^    unsigned char getAux() const {return _aux;}$/;"	f	class:PacketHeader
+getBinaryHeader	packetheader.h	/^    unsigned char getBinaryHeader() const {return _header;}$/;"	f	class:PacketHeader
+getBody	packet.h	/^    unsigned char* getBody() const {return _body;}$/;"	f	class:Packet
+getBodyLength	packet.h	/^    int getBodyLength() const {return _bodylen;}$/;"	f	class:Packet
+getHeader	packet.h	/^    Header getHeader() const {return _header;}$/;"	f	class:Packet
+getHeaderSize	packetheader.h	/^    static int getHeaderSize() {return sizeof(char);}$/;"	f	class:PacketHeader
+getPeerName	socket.cpp	/^string Socket::getPeerName() {$/;"	f	class:Socket
+getPeerName	socketprotocol.cpp	/^string SocketProtocol::getPeerName() $/;"	f	class:SocketProtocol
+getSocketName	socket.cpp	/^string Socket::getSocketName(){$/;"	f	class:Socket
+getSocketName	socketprotocol.cpp	/^string SocketProtocol::getSocketName()$/;"	f	class:SocketProtocol
+getType	packetheader.h	/^    tPacketType getType() const {return _type;}$/;"	f	class:PacketHeader
+getVersion	packetheader.h	/^    unsigned char getVersion() const {return _version;}$/;"	f	class:PacketHeader
+operator =	packet.cpp	/^Packet& Packet::operator=(const Packet& packet) {$/;"	f	class:Packet
+operator bool	socket.cpp	/^Socket::operator bool () const{$/;"	f	class:Socket
+operator bool	socketprotocol.cpp	/^SocketProtocol::operator bool () const$/;"	f	class:SocketProtocol
+port_type	socket.h	/^typedef unsigned short port_type;$/;"	t
+rcv	socket.cpp	/^int Socket::rcv(unsigned char *buf,const int &len){$/;"	f	class:Socket
+rcv	socketprotocol.cpp	/^int SocketProtocol::rcv(Packet &packet)$/;"	f	class:SocketProtocol
+select	socket.cpp	/^bool Socket::select(const bool &read,const int &mseg) {  $/;"	f	class:Socket
+select	socketprotocol.cpp	/^bool SocketProtocol::select(const bool &read, const int &mseg) $/;"	f	class:SocketProtocol
+send	socket.cpp	/^int Socket::send(unsigned char *buf,const int &len){$/;"	f	class:Socket
+send	socketprotocol.cpp	/^int SocketProtocol::send(const Packet &packet)$/;"	f	class:SocketProtocol
+setBody	packet.cpp	/^void Packet::setBody(unsigned char *body,int bodylen) {$/;"	f	class:Packet
+setHeader	packet.cpp	/^void Packet::setHeader(const Header &header) {$/;"	f	class:Packet
+tPacketType	packetheader.h	/^enum tPacketType { INIT, START, STATUS, STOP, QUIT, KEY, MESSAGE, CONNECT };$/;"	g
+tState	socket.h	/^    typedef enum tState {OK,ERROR};$/;"	g	class:Socket
+~Packet	packet.cpp	/^Packet::~Packet() {$/;"	f	class:Packet
+~Socket	socket.cpp	/^Socket::~Socket(){$/;"	f	class:Socket

@@ -1,0 +1,35 @@
+#ifndef PLAYERACTIONER_H_
+#define PLAYERACTIONER_H_
+
+#include "server/player.h"
+#include "lib/graph.h"
+#include <map>
+
+/**
+ * Esta es la clase que en realidad se encarga de evaluar los movimientos de los jugadores en el grafo y devolver la posición y arco de destino que estos tendrán. Cuando se habló de que Pacman o Ghost evaluaban un movimiento o si comían un elemento, entre otras cosas, en realidad se comunicaban con este objeto (Del cual tienen una referencia), y éste pidiéndoles el arco en el que se encuentran, su orientación y posición en el mismo, calcula en el grafo la siguiente posición y arco, para que el jugador pueda setearla. También tiene la posibilidad de evaluar si el jugador esta en posición de comer un elemento, o que esta en la posición de la casa de los fantasmas. Y todo esto puede realizarlo mediante cálculos en base al tamaño de los jugadores, los arcos, los elementos, entre otras cosas, y para esto necesita tener una referencia al grafo que conforma el mapa donde se está jugando.
+ */
+class PlayerActioner
+{
+private:
+
+	Graph & _levelGraph;
+	
+	tOrientation getRealPlayerOrientation(tPlayerOrientation playerOrient, tEdgeOrientation playerEdgeO);
+	short int getDirectionSign(tPlayerOrientation playerOrient);
+	
+public:
+	/// 
+	PlayerActioner(Graph & _levelGraph);
+	/// 
+	virtual ~PlayerActioner();
+	///calcula la nueva direccion y arista del jugador. Si puede darse el movimiento, devuelve los valores de posicion y arista, sino devuelve -1 y NULL
+	std::pair< int , const Edge* > evaluateMovement(Player & player);
+	///evalua si el jugaror esta en posicion de comer un elemento, y si lo esta devuelve ese elemento. De lo contrario, devuelve un puntero nulo.
+	Element* evaluateElementInteraction(Player & player);
+	///evalua si el jugador esta en la posicion del vertice de casa de los fantasmas y devuelve true si es asi. 
+	bool evaluateRevivalInteraction(Player & player);
+	///evalua si no hay colision entre los dos jugadores pasados
+	bool evaluatePlayerInteraction(Player & player1, Player & player2);
+};
+
+#endif /*PlayerActioner_H_*/

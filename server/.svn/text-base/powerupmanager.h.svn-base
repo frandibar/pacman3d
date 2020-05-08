@@ -1,0 +1,30 @@
+#ifndef __POWERUPMANAGER_H__
+#define __POWERUPMANAGER_H__
+#include "common/mutex.h"
+
+/**
+ * Clase para administrar los elementos power up
+ * Un PowerUp se habilita, y luego expira
+ * Metodos protegidos por mutex
+ * */
+class PowerUpManager {
+  private:
+    static const int POWERUP_DURATION;
+
+    bool _powerupMode;
+    int _powerUpEnabledTime;
+    Mutex _mtx;
+  public:
+  	/// constructor
+    PowerUpManager();
+    /// inicializa manager
+    void reset();
+    /// devuelve si el pacman esta en power up
+    bool getPowerUpMode();
+    /// devuelve true si el power up expiro
+    bool powerupExpires();
+    /// inicia el efecto power up
+    void enablePowerup();
+};
+
+#endif /* __POWERUPMANAGER_H__ */

@@ -1,0 +1,9 @@
+script_files = [
+    'tinyxml/SConscript',
+    'sockets/SConscript',
+]
+#   'pthreads_wrappers/SConscript',
+#   'graph/SConscript',
+
+SConscript(script_files)
+
